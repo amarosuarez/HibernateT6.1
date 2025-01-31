@@ -46,8 +46,11 @@ public class Game implements Serializable {
      * @param tiempoJugado Tiempo jugado al juego
      */
     public Game(String nombre, Time tiempoJugado) {
-        this.nombre = nombre;
-        this.tiempoJugado = tiempoJugado;
+        if (nombre != null && !nombre.isEmpty())
+            this.nombre = nombre;
+        
+        if (tiempoJugado != null)
+            this.tiempoJugado = tiempoJugado;
     }
 
     /**
@@ -84,7 +87,8 @@ public class Game implements Serializable {
      * @param nombre Nuevo Nombre del juego
      */
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        if (nombre != null && !nombre.isEmpty())
+            this.nombre = nombre;
     }
 
     /**
@@ -92,6 +96,7 @@ public class Game implements Serializable {
      * @param tiempoJugado Nuevo Tiempo jugado
      */
     public void setTiempoJugado(Time tiempoJugado) {
-        this.tiempoJugado = tiempoJugado;
+        if (tiempoJugado != null)
+            this.tiempoJugado = tiempoJugado;
     }
 }

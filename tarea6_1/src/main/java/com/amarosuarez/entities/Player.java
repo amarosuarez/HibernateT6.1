@@ -52,9 +52,14 @@ public class Player implements Serializable {
      * @param email Email del player
      */
     public Player(String nick, String password, String email) {
-        this.nick = nick;
-        this.password = password;
-        this.email = email;
+        if (nick != null && !nick.isEmpty())
+            this.nick = nick;
+
+        if (password != null && !password.isEmpty())
+            this.password = password;
+
+        if (email != null && !email.isEmpty())
+            this.email = email;
     }
 
     /**
@@ -99,7 +104,8 @@ public class Player implements Serializable {
      * @param nick Nuevo nick
      */
     public void setNick(String nick) {
-        this.nick = nick;
+        if (nick != null && !nick.isEmpty())
+            this.nick = nick;
     }
 
     /**
@@ -107,7 +113,8 @@ public class Player implements Serializable {
      * @param password Nueva password
      */
     public void setPassword(String password) {
-        this.password = password;
+        if (password != null && !password.isEmpty())
+            this.password = password;
     }
 
     /**
@@ -115,6 +122,7 @@ public class Player implements Serializable {
      * @param email Nuevo email
      */
     public void setEmail(String email) {
-        this.email = email;
+        if (email != null && !email.isEmpty())
+            this.email = email;
     }
 }
