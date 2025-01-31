@@ -1,12 +1,15 @@
 package com.amarosuarez.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -46,12 +49,19 @@ public class Player implements Serializable {
     private String email;
 
     /**
-     * Constructor con los parámetros nick, password, email
+     * Atributo que almacena la lista de compras del player
+     */
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    private List<Compra> compras;
+
+    /**
+     * Constructor con los parámetros nick, password, email, compras
      * @param nick Nick del player
      * @param password Password del player
      * @param email Email del player
+     * @param compras Lista de compras del player
      */
-    public Player(String nick, String password, String email) {
+    public Player(String nick, String password, String email, List<Compra> compras) {
         if (nick != null && !nick.isEmpty())
             this.nick = nick;
 
@@ -60,6 +70,10 @@ public class Player implements Serializable {
 
         if (email != null && !email.isEmpty())
             this.email = email;
+
+        if (compras != null) {
+            this.compras = compras;
+        }
     }
 
     /**
@@ -100,6 +114,14 @@ public class Player implements Serializable {
     }
 
     /**
+     * Función que devuelve la lista de compras del player
+     * @return Lista ed compras del player
+     */
+    public List<Compra> getCompras() {
+        return this.compras;
+    }
+
+    /**
      * Función que almacena el nick del player
      * @param nick Nuevo nick
      */
@@ -124,5 +146,15 @@ public class Player implements Serializable {
     public void setEmail(String email) {
         if (email != null && !email.isEmpty())
             this.email = email;
+    }
+
+    /**
+     * Función que almacena las compras del player
+     * @param compras Nueva lista de compra
+     */
+    public void setCompras(List<Compra> compras) {
+        if (compras != null) {
+            this.compras = compras;
+        }
     }
 }

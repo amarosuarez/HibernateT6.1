@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -57,6 +59,14 @@ public class Compra implements Serializable {
      */
     @Column(name = "FechaCompra")
     private Date fechaCompra;
+
+    @ManyToOne
+    @JoinColumn(name = "idPlayer", nullable = false, insertable = false, updatable = false)
+    private Player player;
+
+    @ManyToOne
+    @JoinColumn(name = "idGame", nullable = false, insertable = false, updatable = false)
+    private Game game;
 
     /**
      * Constructor con todos los parámetros

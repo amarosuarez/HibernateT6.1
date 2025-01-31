@@ -2,12 +2,15 @@ package com.amarosuarez.entities;
 
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -41,16 +44,26 @@ public class Game implements Serializable {
     private Time tiempoJugado;
 
     /**
+     * Atributo que almacena las compras en las que aparece el juego
+     */
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<Compra> compras;
+
+    /**
      * Constructor con los parámetros nombre y tiempoJugado
      * @param nombre Nombre del juego
      * @param tiempoJugado Tiempo jugado al juego
+     * @param compras Lista de compras donde aparece el juego
      */
-    public Game(String nombre, Time tiempoJugado) {
+    public Game(String nombre, Time tiempoJugado, List<Compra> compras) {
         if (nombre != null && !nombre.isEmpty())
             this.nombre = nombre;
         
         if (tiempoJugado != null)
             this.tiempoJugado = tiempoJugado;
+
+        if (compras != null)
+            this.compras = compras;
     }
 
     /**
