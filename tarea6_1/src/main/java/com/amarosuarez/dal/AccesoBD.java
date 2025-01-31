@@ -1,0 +1,123 @@
+package com.amarosuarez.dal;
+
+import java.util.List;
+
+import javax.persistence.TypedQuery;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+/**
+ * Clase que almacena los métodos relacionados a la Base de Datos
+ *
+ * @author Amaro Suárez
+ * @version 1.0
+ */
+public class AccesoBD {
+
+    /**
+     * Atributo que almacena el sessionfactory
+     */
+    private SessionFactory sf;
+
+    /**
+     * Atributo que almacena la sesion
+     */
+    private Session session;
+
+    /**
+     * Atributo que almacena el transaction
+     */
+    private Transaction transaction;
+
+    /**
+     * Función que configura Hibernate
+     *
+     * @throws Exception Exception
+     */
+    protected void setUp() throws Exception {
+        final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                .configure() // por defecto: hibernate.cfg.xml
+                .build();
+        try {
+            sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+        } catch (Exception e) {
+            StandardServiceRegistryBuilder.destroy(registry);
+            throw new Exception("Error al configurar Hibernate: " + e.getMessage(), e); // Lanza una excepción clara
+        }
+    }
+
+    /**
+     * Función que abre la conexión con la base de datos e inicia una
+     * transacción
+     *
+     * @throws Exception Excepción
+     */
+    public void abrir() throws Exception {
+        setUp();
+        session = sf.openSession();
+        transaction = session.beginTransaction();
+    }
+
+    /**
+     * Función que cierra la transacción y la base de datos
+     */
+    public void cerrar() {
+        try {
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+        }
+        sf.close();
+    }
+
+    /**
+     * Función que guarda un objeto
+     *
+     * @param cosa Objeto a guardar
+     * @return Objeto
+     */
+    public Object guardar(Object cosa) {
+        return session.save(cosa);
+    }
+
+    /**
+     * Función que devuelve una lista
+     * @param namedQuery Nombre de la query
+     * @return Lista
+     */
+    public List listar(String namedQuery) {
+        TypedQuery query = session.getNamedQuery(namedQuery);
+
+        return query.getResultList();
+    }
+
+    /**
+     * Función que devuelve un objeto buscado por id
+     * @param namedQuery Nombre de la query
+     * @param id Id a buscar
+     * @return Objeto
+     */
+    public Object buscarPorId(String namedQuery, int id) {
+        TypedQuery query = session.getNamedQuery(namedQuery).setParameter("id", id);
+
+        return query.getSingleResult();
+    }
+
+    /**
+     * Función que busca por parámetro especificado
+     * @param namedQuery Nombre de la query
+     * @param parametro Nombre del parámetro
+     * @param valor Valor del parámetro (String)
+     * @return Lista de los objetos encontrados
+     */
+    public List buscarPorParametro(String namedQuery, String parametro, String valor) {
+        TypedQuery query = session.getNamedQuery(namedQuery).setParameter(parametro, valor);
+
+        return query.getResultList();
+    }
+}

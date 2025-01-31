@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -19,6 +21,24 @@ import javax.persistence.Table;
  * @author Amaro Suárez
  * @version 1.0
  */
+@NamedQueries({
+    @NamedQuery(
+        name="getAllPlayers",
+        query="from Player"
+    ),
+    @NamedQuery(
+        name="getPlayerById",
+        query="from Player where idPlayer = :id"
+    ),
+    @NamedQuery(
+        name="getPlayersByNick",
+        query="from Player where nick LIKE :nick"
+    ),
+    @NamedQuery(
+        name="getPlayersByEmail",
+        query="from Player where email LIKE :email"
+    ),
+})
 @Entity
 @Table(name = "Players")
 public class Player implements Serializable {
