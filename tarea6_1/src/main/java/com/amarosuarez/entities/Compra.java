@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -19,6 +21,20 @@ import javax.persistence.Table;
  * @author Amaro Suárez
  * @version 1.0
  */
+@NamedQueries({
+    @NamedQuery(
+        name="getAllCompras",
+        query="from Compra"
+    ),
+    @NamedQuery(
+        name="getCompraById",
+        query="from Compra where idCompra = :id"
+    ),
+    @NamedQuery(
+        name="getComprasByPlayer",
+        query="from Compra where nombre LIKE :nombre"
+    ),
+})
 @Entity
 @Table(name = "Compras")
 public class Compra implements Serializable {
@@ -39,7 +55,7 @@ public class Compra implements Serializable {
     /**
      * Atributo que almacena el id del juego
      */
-    @Column(name = "idGames")
+    @Column(name = "idGame")
     private int idGame;
 
     /**
