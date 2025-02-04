@@ -5,6 +5,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 
 import com.amarosuarez.dal.AccesoBD;
+import com.amarosuarez.entities.Game;
 import com.amarosuarez.entities.Player;
 
 public class Main {
@@ -208,8 +209,93 @@ public class Main {
                     } while (opcionBuscarPlayer != 4);
                 }
                 case 3 -> {
+                    // Muestra todos los games
+                    try {
+                        List<Game> listaGames = instancia.listar("getAllGames");
+
+                        if (!listaGames.isEmpty()) {
+                            for (Game game : listaGames) {
+                                System.out.println("-----------------");
+                                System.out.println("Nombre -> " + game.getNombre());
+                                System.out.println("Tiempo jugado -> " + game.getTiempoJugado());
+                            }
+
+                            System.out.println("-----------------");
+                        } else {
+                            System.out.println("No se ha encontrado ningún player");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("No se ha encontrado ningún player");
+                    }
                 }
                 case 4 -> {
+                    // Listar un solo juego
+                    int opcionGame = 0;
+
+                    do {
+                        System.out.println();
+                        System.out.println("¿Por qué campo desea buscar el Game?");
+                        System.out.println("1. ID");
+                        System.out.println("2. Nombre");
+                        System.out.println("3. Volver");
+
+                        // Obtenemos la opción
+                        opcionGame = scanner.nextInt();
+
+                        // Limpiamos el scanner
+                        scanner.nextLine();
+
+                        switch (opcionGame) {
+                            case 1:
+                                int idGame;
+
+                                // Preguntamos y leemos el id
+                                System.out.println();
+                                System.out.println("¿Cuál es el ID?");
+
+                                idGame = scanner.nextInt();
+
+                                // Limpiamos el scanner
+                                scanner.nextLine();
+
+                                // Obtenemos el juego y lo mostramos por pantalla
+                                Game game = (Game) instancia.buscarPorId("getGameById", idGame);
+
+                                System.out.println("-----------------");
+                                System.out.println("Nombre -> " + game.getNombre());
+                                System.out.println("Tiempo jugado -> " + game.getTiempoJugado());
+                                System.out.println("-----------------");
+
+                                break;
+                        
+                            case 2:
+                                String nombreJuego;
+
+                                // Preguntamos y leemos el nombre del juego
+                                System.out.println();
+                                System.out.println("¿Cuál es el nombre del Game?");
+                                nombreJuego = scanner.nextLine();
+
+                                // Obtenemos todos los juegos con ese nombre o que lo contengan
+                                List<Game> games = instancia.buscarPorParametro("getGamesByName", "nombre", "%" + nombreJuego + "%");
+
+                                // Mostramos los juegos
+                                for (Game gameObject : games) {
+                                    System.out.println("-----------------");
+                                    System.out.println("Nombre -> " + gameObject.getNombre());
+                                    System.out.println("Tiempo jugado -> " + gameObject.getTiempoJugado());
+                                }
+
+                                System.out.println("-----------------");
+                                break;
+                            
+                            case 3:
+                                System.out.println("Volviendo...");
+                                break;
+                        }
+                    } while (opcionGame != 3);
+
+
                 }
                 case 5 -> {
                 }
@@ -217,11 +303,6 @@ public class Main {
                 }
                 case 7 -> System.out.println("Volviendo...");
             }
-            // Muestra todos los game
-            // Muestra solo un game
-            // Muestra todas las compras
-            // Muestra solo una compra
-            
         } catch (Exception e) {
             System.out.println("Error al abrir la instancia:" + e.getMessage());
         } finally {

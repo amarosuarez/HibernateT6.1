@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -20,6 +22,20 @@ import javax.persistence.Table;
  * @author Amaro Suárez
  * @version 1.0
  */
+@NamedQueries({
+    @NamedQuery(
+        name="getAllGames",
+        query="from Game"
+    ),
+    @NamedQuery(
+        name="getGameById",
+        query="from Game where idGame = :id"
+    ),
+    @NamedQuery(
+        name="getGamesByName",
+        query="from Game where nombre LIKE :nombre"
+    ),
+})
 @Entity
 @Table(name = "Games")
 public class Game implements Serializable {
