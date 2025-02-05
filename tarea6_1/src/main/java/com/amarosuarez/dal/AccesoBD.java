@@ -95,6 +95,32 @@ public class AccesoBD {
 
         return query.getResultList();
     }
+    
+    /**
+     * Función que devuelve una lista buscada por un parámetro determinado
+     * @param namedQuery Nombre de la query
+     * @param parametro Nombre del parámetro
+     * @param valor Valor del parámetro
+     * @return Lista
+     */
+    public List listarConParametros(String namedQuery, String parametro, String valor) {
+        TypedQuery query = session.getNamedQuery(namedQuery).setParameter(parametro, valor);
+
+        return query.getResultList();
+    }
+    
+    /**
+     * Función que devuelve una lista buscada por un parámetro determinado y su valor es int
+     * @param namedQuery Nombre de la query
+     * @param parametro Nombre del parámetro
+     * @param valor Valor del parámetro (int)
+     * @return Lista
+     */
+    public List listarConParametros(String namedQuery, String parametro, int valor) {
+        TypedQuery query = session.getNamedQuery(namedQuery).setParameter(parametro, valor);
+
+        return query.getResultList();
+    }
 
     /**
      * Función que devuelve un objeto buscado por id

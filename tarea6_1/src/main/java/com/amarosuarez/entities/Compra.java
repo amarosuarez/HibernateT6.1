@@ -32,7 +32,7 @@ import javax.persistence.Table;
     ),
     @NamedQuery(
         name="getComprasByPlayer",
-        query="from Compra where nombre LIKE :nombre"
+        query="from Compra where idPlayer = :idPlayer"
     ),
 })
 @Entity
