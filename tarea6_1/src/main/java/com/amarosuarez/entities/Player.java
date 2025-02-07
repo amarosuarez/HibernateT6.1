@@ -75,6 +75,23 @@ public class Player implements Serializable {
     private List<Compra> compras;
 
     /**
+     * Constructor con los parámetros nick, password, email
+     * @param nick Nick del player
+     * @param password Password del player
+     * @param email Email del player
+     */
+    public Player(String nick, String password, String email) {
+        if (nick != null && !nick.isEmpty())
+            this.nick = nick;
+
+        if (password != null && !password.isEmpty())
+            this.password = password;
+
+        if (email != null && !email.isEmpty())
+            this.email = email;
+    }
+
+    /**
      * Constructor con los parámetros nick, password, email, compras
      * @param nick Nick del player
      * @param password Password del player

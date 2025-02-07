@@ -1,7 +1,6 @@
 package com.amarosuarez.entities;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,29 +15,29 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * Clase Game que almacena sus atributos y métodos,
- * además sirve para generar la tabla en la base de datos
+ * Clase Game que almacena sus atributos y métodos, además sirve para generar la
+ * tabla en la base de datos
  *
  * @author Amaro Suárez
  * @version 1.0
  */
 @NamedQueries({
     @NamedQuery(
-        name="getAllGames",
-        query="from Game"
+            name = "getAllGames",
+            query = "from Game"
     ),
     @NamedQuery(
-        name="getGameById",
-        query="from Game where idGame = :id"
+            name = "getGameById",
+            query = "from Game where idGame = :id"
     ),
     @NamedQuery(
-        name="getGamesByName",
-        query="from Game where nombre LIKE :nombre"
-    ),
-})
+            name = "getGamesByName",
+            query = "from Game where nombre LIKE :nombre"
+    ),})
 @Entity
 @Table(name = "Games")
 public class Game implements Serializable {
+
     /**
      * Atributo que almacena el id del juego
      */
@@ -57,7 +56,7 @@ public class Game implements Serializable {
      * Atributo que almacena el tiempo jugado
      */
     @Column(name = "tiempoJugado")
-    private Time tiempoJugado;
+    private String tiempoJugado;
 
     /**
      * Atributo que almacena las compras en las que aparece el juego
@@ -67,28 +66,51 @@ public class Game implements Serializable {
 
     /**
      * Constructor con los parámetros nombre y tiempoJugado
+     *
      * @param nombre Nombre del juego
      * @param tiempoJugado Tiempo jugado al juego
      * @param compras Lista de compras donde aparece el juego
      */
-    public Game(String nombre, Time tiempoJugado, List<Compra> compras) {
-        if (nombre != null && !nombre.isEmpty())
+    public Game(String nombre, String tiempoJugado) {
+        if (nombre != null && !nombre.isEmpty()) {
             this.nombre = nombre;
-        
-        if (tiempoJugado != null)
-            this.tiempoJugado = tiempoJugado;
+        }
 
-        if (compras != null)
+        if (tiempoJugado != null && !tiempoJugado.isEmpty()) {
+            this.tiempoJugado = tiempoJugado;
+        }
+    }
+
+    /**
+     * Constructor con los parámetros nombre, tiempoJugado y compras
+     *
+     * @param nombre Nombre del juego
+     * @param tiempoJugado Tiempo jugado al juego
+     * @param compras Lista de compras donde aparece el juego
+     */
+    public Game(String nombre, String tiempoJugado, List<Compra> compras) {
+        if (nombre != null && !nombre.isEmpty()) {
+            this.nombre = nombre;
+        }
+
+        if (tiempoJugado != null && !tiempoJugado.isEmpty()) {
+            this.tiempoJugado = tiempoJugado;
+        }
+
+        if (compras != null) {
             this.compras = compras;
+        }
     }
 
     /**
      * Constructor sin parámetros
      */
-    public Game() {}
+    public Game() {
+    }
 
     /**
      * Función que devuelve el id del juego
+     *
      * @return Id del juego
      */
     public int getIdGame() {
@@ -97,6 +119,7 @@ public class Game implements Serializable {
 
     /**
      * Función que devuelve el nombre del juego
+     *
      * @return Nombre del juego
      */
     public String getNombre() {
@@ -105,27 +128,32 @@ public class Game implements Serializable {
 
     /**
      * Función que devuelve el tiempo jugado
+     *
      * @return Tiempo jugado
      */
-    public Time getTiempoJugado() {
+    public String getTiempoJugado() {
         return this.tiempoJugado;
     }
 
     /**
      * Función que almacena el nombre del juego
+     *
      * @param nombre Nuevo Nombre del juego
      */
     public void setNombre(String nombre) {
-        if (nombre != null && !nombre.isEmpty())
+        if (nombre != null && !nombre.isEmpty()) {
             this.nombre = nombre;
+        }
     }
 
     /**
      * Función que almacena el tiempo jugado
+     *
      * @param tiempoJugado Nuevo Tiempo jugado
      */
-    public void setTiempoJugado(Time tiempoJugado) {
-        if (tiempoJugado != null)
+    public void setTiempoJugado(String tiempoJugado) {
+        if (tiempoJugado != null && !tiempoJugado.isEmpty()) {
             this.tiempoJugado = tiempoJugado;
+        }
     }
 }

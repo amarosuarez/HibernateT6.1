@@ -1,7 +1,6 @@
 package com.amarosuarez.entities;
 
 import java.io.Serializable;
-import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +32,18 @@ import javax.persistence.Table;
     @NamedQuery(
         name="getComprasByPlayer",
         query="from Compra where idPlayer = :idPlayer"
+    ),
+    @NamedQuery(
+        name="getComprasByGame",
+        query="from Compra where idGame = :idGame"
+    ),
+    @NamedQuery(
+        name="getComprasByPrice",
+        query="from Compra where precio >= :precioInicio and precio <= :precioFin"
+    ),
+    @NamedQuery(
+        name="getComprasByDate",
+        query="from Compra where fechaCompra = :fechaCompra"
     ),
 })
 @Entity
@@ -74,7 +85,7 @@ public class Compra implements Serializable {
      * Atributo que almacena la fecha de la compra
      */
     @Column(name = "FechaCompra")
-    private Date fechaCompra;
+    private String fechaCompra;
 
     @ManyToOne
     @JoinColumn(name = "idPlayer", nullable = false, insertable = false, updatable = false)
@@ -92,7 +103,7 @@ public class Compra implements Serializable {
      * @param precio Precio del juego
      * @param fechaCompra Fecha de la compra
      */
-    public Compra(int idPlayer, int idGame, String cosa, double precio, Date fechaCompra) {
+    public Compra(int idPlayer, int idGame, String cosa, double precio, String fechaCompra) {
         if (idPlayer >= 0) {
             this.idPlayer = idPlayer;
         }
@@ -163,7 +174,7 @@ public class Compra implements Serializable {
      * Función que devuelve la fecha de la compra
      * @return Fecha de la compra
      */
-    public Date getFechaCompra() {
+    public String getFechaCompra() {
         return this.fechaCompra;
     }
 
@@ -209,7 +220,7 @@ public class Compra implements Serializable {
      * Función que coloca la fecha de la compra
      * @param fechaCompra Fecha de la compra
      */
-    public void setFechaCompra(Date fechaCompra) {
+    public void setFechaCompra(String fechaCompra) {
         if (fechaCompra != null)
             this.fechaCompra = fechaCompra;
     }

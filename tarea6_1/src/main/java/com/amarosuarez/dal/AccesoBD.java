@@ -11,6 +11,8 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
+import com.amarosuarez.entities.Compra;
+
 /**
  * Clase que almacena los métodos relacionados a la Base de Datos
  *
@@ -118,6 +120,20 @@ public class AccesoBD {
      */
     public List listarConParametros(String namedQuery, String parametro, int valor) {
         TypedQuery query = session.getNamedQuery(namedQuery).setParameter(parametro, valor);
+
+        return query.getResultList();
+    }
+    
+    /**
+     * Función que devuelve una lista de compras filtradas por un rango de precios
+     * @param valor1 Valor del precio inicial
+     * @param valor2 Valor del precio final
+     * @return Lista
+     */
+    public List<Compra> listarPorPrecio(double valor1, double valor2) {
+        TypedQuery query = session.getNamedQuery("getComprasByPrice")
+            .setParameter("precioInicio", valor1)
+            .setParameter("precioFin", valor2);
 
         return query.getResultList();
     }
