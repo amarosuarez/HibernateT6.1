@@ -1,5 +1,6 @@
 package com.amarosuarez;
 
+import java.time.Year;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -422,68 +423,62 @@ public class Main {
 
                                 nickPlayer = scanner.nextLine();
 
-                                try {
-                                    // Buscamos al player
-                                    List<Player> players = instancia.buscarPorParametro("getPlayersByNick", "nick",
-                                            "%" + nickPlayer + "%");
+                                List<Player> players = getAllPlayersByNick(nickPlayer);
 
-                                    if (!players.isEmpty()) {
-                                        if (players.size() > 1) {
+                                if (players != null && !players.isEmpty()) {
+                                    if (players.size() > 1) {
 
-                                            for (int i = 0; i < players.size(); i++) {
-                                                Player playerO = players.get(i);
+                                        for (int i = 0; i < players.size(); i++) {
+                                            Player playerO = players.get(i);
+                                            System.out.println("-----------------");
+                                            System.out.println("Opción " + i);
+                                            System.out.println("ID -> " + playerO.getIdPlayer());
+                                            System.out.println("Nick -> " + playerO.getNick());
+                                            System.out.println("Email -> " + playerO.getEmail());
+                                        }
+                                        System.out.println("-----------------");
+
+                                        do {
+                                            System.out.println();
+                                            System.out.println(
+                                                    "Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
+                                            playerOption = scanner.nextInt();
+                                        } while (playerOption > players.size());
+
+                                        // Limpiamos el Scanner
+                                        scanner.nextLine();
+                                    }
+
+                                    if (playerOption != -1) {
+                                        // Obtenemos el player seleccionado
+                                        Player player = players.get(playerOption);
+
+                                        // Buscamos las compras
+                                        List<Compra> compras = instancia.listarConParametros(
+                                                "getComprasByPlayer",
+                                                "idPlayer",
+                                                player.getIdPlayer());
+
+                                        if (!compras.isEmpty()) {
+                                            // Pintamos las compras
+                                            for (Compra compra : compras) {
                                                 System.out.println("-----------------");
-                                                System.out.println("Opción " + i);
-                                                System.out.println("ID -> " + playerO.getIdPlayer());
-                                                System.out.println("Nick -> " + playerO.getNick());
-                                                System.out.println("Email -> " + playerO.getEmail());
+                                                System.out.println("ID -> " + compra.getIdCompra());
+                                                System.out.println("Player -> " + player.getNick());
+                                                System.out.println("Game -> " + compra.getCosa());
+                                                System.out.println("Precio -> " + compra.getPrecio() + " €");
+                                                System.out.println(
+                                                        "Fecha de compra -> " + compra.getFechaCompra());
                                             }
                                             System.out.println("-----------------");
-
-                                            do {
-                                                System.out.println();
-                                                System.out.println(
-                                                        "Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
-                                                playerOption = scanner.nextInt();
-                                            } while (playerOption > players.size());
-
-                                            // Limpiamos el Scanner
-                                            scanner.nextLine();
-                                        }
-
-                                        if (playerOption != -1) {
-                                            // Obtenemos el player seleccionado
-                                            Player player = players.get(playerOption);
-
-                                            // Buscamos las compras
-                                            List<Compra> compras = instancia.listarConParametros(
-                                                    "getComprasByPlayer",
-                                                    "idPlayer",
-                                                    player.getIdPlayer());
-
-                                            if (!compras.isEmpty()) {
-                                                // Pintamos las compras
-                                                for (Compra compra : compras) {
-                                                    System.out.println("-----------------");
-                                                    System.out.println("ID -> " + compra.getIdCompra());
-                                                    System.out.println("Player -> " + player.getNick());
-                                                    System.out.println("Game -> " + compra.getCosa());
-                                                    System.out.println("Precio -> " + compra.getPrecio() + " €");
-                                                    System.out.println(
-                                                            "Fecha de compra -> " + compra.getFechaCompra());
-                                                }
-                                                System.out.println("-----------------");
-                                            } else {
-                                                System.out.println("No se ha encontrado ninguna compra para ese player");
-                                            }
                                         } else {
-                                            System.out.println("Volviendo...");
+                                            System.out.println("No se ha encontrado ninguna compra para ese player");
                                         }
                                     } else {
-                                        System.out.println("No se ha encontrado ningún player con ese nick");
+                                        System.out.println("Volviendo...");
                                     }
-                                } catch (Exception e) {
-                                    System.out.println("No se ha encontrado ninguna compra para ese player");
+                                } else {
+                                    System.out.println("No se ha encontrado ningún player con ese nick");
                                 }
 
                                 break;
@@ -808,6 +803,131 @@ public class Main {
                 }
                 case 3 -> {
                     // Añade una Compra
+                    int playerOption = 0;
+                    String nickPlayer;
+
+                    // Preguntamos el nick del player y la leemos
+                    System.out.println();
+                    System.out.println("¿Cuál es el nick del player?");
+
+                    nickPlayer = scanner.nextLine();
+
+                    List<Player> players = getAllPlayersByNick(nickPlayer);
+
+                    if (players != null && !players.isEmpty()) {
+                        if (players.size() > 1) {
+
+                            for (int i = 0; i < players.size(); i++) {
+                                Player playerO = players.get(i);
+                                System.out.println("-----------------");
+                                System.out.println("Opción " + i);
+                                System.out.println("ID -> " + playerO.getIdPlayer());
+                                System.out.println("Nick -> " + playerO.getNick());
+                                System.out.println("Email -> " + playerO.getEmail());
+                            }
+                            System.out.println("-----------------");
+
+                            do {
+                                System.out.println();
+                                System.out.println(
+                                        "Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
+                                playerOption = scanner.nextInt();
+                            } while (playerOption > players.size());
+
+                            // Limpiamos el Scanner
+                            scanner.nextLine();
+                            
+                        }
+
+                        if (playerOption != -1) {
+                            Player player = players.get(playerOption);
+
+                            // Agregamos un juego
+                            String gameName;
+                            int gameOption = 0;
+
+                            System.out.println();
+                            System.out.println("¿Cuál es el nombre del juego?");
+                            gameName = scanner.nextLine();
+
+                            List<Game> games = getAllGames(gameName);
+
+                            if (games != null && !games.isEmpty()) {
+                                if (games.size() >= 1) {
+                                    for (int i = 0; i < games.size(); i++) {
+                                        Game game = games.get(i);
+                                        System.out.println("-----------------");
+                                        System.out.println("Opción " + i);
+                                        System.out.println("ID -> " + game.getIdGame());
+                                        System.out.println("Nombre -> " + game.getNombre());
+                                        System.out.println("Tiempo jugado -> " + game.getTiempoJugado());
+                                    }
+                                    System.out.println("-----------------");
+
+                                    do {
+                                        System.out.println();
+                                        System.out.println(
+                                                "Escribe el número de opción del juego que deseas seleccionar (-1 para volver)");
+                                        gameOption = scanner.nextInt();
+                                    } while (gameOption > games.size());
+                                }
+
+                                if (gameOption >= 0) {
+                                    Game game = games.get(gameOption);
+
+                                    // Pedimos un precio
+                                    double precio = 0;
+
+                                    do {
+                                        System.out.println();
+                                        System.out.println("¿Cuál es el precio?");
+                                        precio = scanner.nextDouble();
+                                    } while (precio < 0);
+
+                                    scanner.nextLine();
+
+                                    // Pedimos la fecha de la compra
+                                    int dia;
+                                    int mes;
+                                    int anyo;
+
+                                    System.out.println();
+                                    System.out.println("¿Cuál es el año de la compra?");
+                                    anyo = scanner.nextInt();
+
+                                    System.out.println();
+                                    System.out.println("¿Cuál es el mes de la compra?");
+                                    mes = scanner.nextInt();
+
+                                    do {
+                                        System.out.println();
+                                        System.out.println("¿Cuál es el día de la compra?");
+                                        dia = scanner.nextInt();
+                                    } while(
+                                        dia > 31 ||
+                                        dia < 1 ||
+                                        ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) ||
+                                        (Year.isLeap(anyo) && mes == 2 && dia > 29) ||
+                                        (!Year.isLeap(anyo) && mes == 2 && dia > 28)
+                                    );
+
+                                    String fecha = dia + "/" + mes + "/" + anyo;
+
+                                    Compra compra = new Compra(player.getIdPlayer(), game.getIdGame(), game.getNombre(), precio, fecha);
+                                    instancia.guardar(compra);
+                                } else {
+                                    System.out.println("Volviendo...");
+                                }
+                            } else {
+                                System.out.println("No se ha encontrado ningún juego con ese nombre");
+                            }
+
+                        } else {
+                            System.out.println("Volviendo...");
+                        }
+                    } else {
+                        System.out.println("No se ha encontrado ningún player con esen nick");
+                    }
                 }
                 case 4 -> {
                     System.out.println("Volviendo...");
@@ -818,5 +938,35 @@ public class Main {
         } finally {
             instancia.cerrar();
         }
+    }
+
+    // Función que obtiene todos los players con un nick
+    private static List<Player> getAllPlayersByNick(String nick) {
+        List<Player> players = null;
+
+        try {
+            // Buscamos al player
+            players = instancia.buscarPorParametro("getPlayersByNick", "nick",
+            "%" + nick + "%");
+        } catch(Exception e) {
+            // No se ha encontrado nada
+        }
+
+        return players;
+    }
+
+    // Función que obtiene todos los games con su name
+    private static List<Game> getAllGames(String name) {
+        List<Game> games = null;
+
+        try {
+            // Buscamos los games
+            games = instancia.buscarPorParametro("getGamesByName", "nombre",
+            "%" + name + "%");
+        } catch(Exception e) {
+            // No se ha encontrado nada
+        }
+
+        return games;
     }
 }
