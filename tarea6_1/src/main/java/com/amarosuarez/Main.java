@@ -30,11 +30,9 @@ public class Main {
             // Limpiamos el scanner
             scanner.nextLine();
 
-            // Salto de línea
-            System.out.println();
-
             switch (opcion) {
                 case 1 -> {
+                    // LISTAR
                     int opcionListar;
 
                     do {
@@ -49,12 +47,10 @@ public class Main {
 
                         // Ejecutamos la opción seleccionada
                         mostrarListarOpcion(opcionListar);
-
-                        // Salto de línea
-                        System.out.println();
                     } while (opcionListar != 7);
                 }
                 case 2 -> {
+                    // AÑADIR
                     int opcionAnyadir;
 
                     do {
@@ -69,9 +65,25 @@ public class Main {
 
                         // Ejecutamos la opción seleccioanda
                         mostrarAnyadirOpcion(opcionAnyadir);
-
-                        // Salto de línea
                     } while (opcionAnyadir != 4);
+                }
+                case 4 -> {
+                    // ELIMINAR
+                    int opcionEliminar;
+
+                    do {
+                        // Mostramos el menú de eliminar
+                        menuEliminar();
+
+                        // Recogemos la opción elegida
+                        opcionEliminar = scanner.nextInt();
+
+                        // Limpiamos el Scanner
+                        scanner.nextLine();
+
+                        // Ejecutamos la opción seleccioanda
+                        mostrarEliminarOpcion(opcionEliminar);
+                    } while (opcionEliminar != 4);
                 }
                 case 5 ->
                     System.out.println("Hasta la próxima!");
@@ -95,6 +107,7 @@ public class Main {
 
     // Función que pinta el menú de listar
     private static void menuListar() {
+        System.out.println();
         System.out.println("¿Qué desea listar?");
         System.out.println("1. Todos los jugadores");
         System.out.println("2. Un jugador");
@@ -956,6 +969,247 @@ public class Main {
         }
     }
 
+    // Función que pinta el menú de eliminar
+    private static void menuEliminar() {
+        System.out.println();
+        System.out.println("¿Qué desea eliminar?");
+        System.out.println("1. Un registro");
+        System.out.println("2. Una tabla");
+        System.out.println("3. Todas las tablas");
+        System.out.println("4. Volver al menú principal");
+    }
+
+    // Función que muestra los resultados de la opción elegida de eliminar
+    private static void mostrarEliminarOpcion(int opcionEliminar) {
+        try {
+            instancia.abrir();
+
+            switch (opcionEliminar) {
+                case 1 -> {
+                    // Elimina un registro
+                    int tabla;
+
+                    do {
+                        System.out.println();
+                        System.out.println("¿De qué tabla deseas eliminar?");
+                        System.out.println("1. Player");
+                        System.out.println("2. Game");
+                        System.out.println("3. Compra");
+                        System.out.println("4. Volver");
+
+                        // Leemos la tabla elegida y limpiamos el scanner
+                        tabla = scanner.nextInt();
+                        scanner.nextLine();
+
+                        switch (tabla) {
+                            case 1 -> {
+                                eliminarPlayer();
+                            }
+                        }
+                    } while (tabla != 4);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al abrir la instancia:" + e.getMessage());
+        } finally {
+            instancia.cerrar();
+        }
+    }
+
+    // Función que elimina un player
+    private static void eliminarPlayer() {
+        int opcion;
+
+        do {
+            System.out.println();
+            System.out.println("¿Por qué campo desea eliminar?");
+            System.out.println("1. ID");
+            System.out.println("2. Nick");
+            System.out.println("3. Email");
+            System.out.println("4. Volver");
+
+            // Leemos la opción y limpiamos el scanner
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcion) {
+                case 1 -> {
+                    // Por ID
+                    int id;
+
+                    System.out.println();
+                    System.out.println("¿Cuál es el ID (-1 para salir)");
+                    id = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (id > -1) {
+                        try {
+                            Player player = (Player) instancia.buscarPorId("getPlayerById", id);
+
+                            System.out.println();
+                            System.out.println("El player elegido es:");
+                            System.out.println("ID -> " + player.getIdPlayer());
+                            System.out.println("Nick -> " + player.getNick());
+                            System.out.println("Email -> " + player.getEmail());
+
+                            String confirm;
+                            do {
+                                System.out.println();
+                                System.out.println("¿Está seguro de que desea eliminarlo? (y/n)");
+                                confirm = scanner.nextLine();
+
+                                if (confirm.equalsIgnoreCase("y")) {
+                                    instancia.borrar(player);
+                                    System.out.println("Player eliminado");
+                                } else if (confirm.equalsIgnoreCase("n")) {
+                                    System.out.println("Operación cancelada");
+                                }
+                            } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
+                        } catch (Exception e) {
+                            System.out.println("No se ha encontrado ningún player con ese ID");
+                        }
+                    } else {
+                        System.out.println("Volviendo...");
+                    }
+                }
+                case 2 -> {
+                    // Por nick
+                    String nick;
+
+                    System.out.println();
+                    System.out.println("¿Cuál es el nick (-1 para salir)");
+                    nick = scanner.nextLine();
+
+                    if (!nick.equals("-1")) {
+                        int playerOption = 0;
+                        Player player;
+                        List<Player> players = getAllPlayersByNick(nick);
+
+                        if (players != null && !players.isEmpty()) {
+                            if (players.size() > 1) {
+                                for (int i = 0; i < players.size(); i++) {
+                                    Player playerO = players.get(i);
+                                    System.out.println("-----------------");
+                                    System.out.println("Opción " + i);
+                                    System.out.println("ID -> " + playerO.getIdPlayer());
+                                    System.out.println("Nick -> " + playerO.getNick());
+                                    System.out.println("Email -> " + playerO.getEmail());
+                                }
+                                System.out.println("-----------------");
+
+                                do {
+                                    System.out.println();
+                                    System.out.println(
+                                            "Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
+                                    playerOption = scanner.nextInt();
+                                } while (playerOption > players.size());
+
+                                // Limpiamos el Scanner
+                                scanner.nextLine();
+                            }
+
+                            if (playerOption != -1) {
+                                player = players.get(playerOption);
+                                System.out.println();
+                                System.out.println("El player elegido es:");
+                                System.out.println("ID -> " + player.getIdPlayer());
+                                System.out.println("Nick -> " + player.getNick());
+                                System.out.println("Email -> " + player.getEmail());
+
+                                String confirm;
+                                do {
+                                    System.out.println();
+                                    System.out.println("¿Está seguro de que desea eliminarlo? (y/n)");
+                                    confirm = scanner.nextLine();
+
+                                    if (confirm.equalsIgnoreCase("y")) {
+                                        instancia.borrar(player);
+                                        System.out.println("Player eliminado");
+                                    } else if (confirm.equalsIgnoreCase("n")) {
+                                        System.out.println("Operación cancelada");
+                                    }
+                                } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
+                            } else {
+                                System.out.println("Volviendo...");
+                            }
+                        } else {
+                            System.out.println("No se ha encontrado ningún player con ese nick");
+                        }
+                    } else {
+                        System.out.println("Volviendo...");
+                    }
+                }
+                case 3 -> {
+                    // Por email
+                    String email;
+
+                    System.out.println();
+                    System.out.println("¿Cuál es el email (-1 para salir)");
+                    email = scanner.nextLine();
+
+                    if (!email.equals("-1")) {
+                        int playerOption = 0;
+                        Player player;
+                        List<Player> players = getAllPlayersByEmail(email);
+
+                        if (players != null && !players.isEmpty()) {
+                            if (players.size() > 1) {
+                                for (int i = 0; i < players.size(); i++) {
+                                    Player playerO = players.get(i);
+                                    System.out.println("-----------------");
+                                    System.out.println("Opción " + i);
+                                    System.out.println("ID -> " + playerO.getIdPlayer());
+                                    System.out.println("Nick -> " + playerO.getNick());
+                                    System.out.println("Email -> " + playerO.getEmail());
+                                }
+                                System.out.println("-----------------");
+
+                                do {
+                                    System.out.println();
+                                    System.out.println(
+                                            "Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
+                                    playerOption = scanner.nextInt();
+                                } while (playerOption > players.size());
+
+                                // Limpiamos el Scanner
+                                scanner.nextLine();
+                            }
+
+                            if (playerOption != -1) {
+                                player = players.get(playerOption);
+                                System.out.println();
+                                System.out.println("El player elegido es:");
+                                System.out.println("ID -> " + player.getIdPlayer());
+                                System.out.println("Nick -> " + player.getNick());
+                                System.out.println("Email -> " + player.getEmail());
+
+                                String confirm;
+                                do {
+                                    System.out.println();
+                                    System.out.println("¿Está seguro de que desea eliminarlo? (y/n)");
+                                    confirm = scanner.nextLine();
+
+                                    if (confirm.equalsIgnoreCase("y")) {
+                                        instancia.borrar(player);
+                                        System.out.println("Player eliminado");
+                                    } else if (confirm.equalsIgnoreCase("n")) {
+                                        System.out.println("Operación cancelada");
+                                    }
+                                } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
+                            } else {
+                                System.out.println("Volviendo...");
+                            }
+                        } else {
+                            System.out.println("No se ha encontrado ningún player con ese email");
+                        }
+                    } else {
+                        System.out.println("Volviendo...");
+                    }
+                }
+            }
+        } while (opcion != 4);
+    }
+
     // Función que obtiene todos los players con un nick
     private static List<Player> getAllPlayersByNick(String nick) {
         List<Player> players = null;
@@ -964,6 +1218,21 @@ public class Main {
             // Buscamos al player
             players = instancia.buscarPorParametro("getPlayersByNick", "nick",
                     "%" + nick + "%");
+        } catch (Exception e) {
+            // No se ha encontrado nada
+        }
+
+        return players;
+    }
+
+    // Función que obtiene todos los players con un email
+    private static List<Player> getAllPlayersByEmail(String email) {
+        List<Player> players = null;
+
+        try {
+            // Buscamos al player
+            players = instancia.buscarPorParametro("getPlayersByEmail", "email",
+                    "%" + email + "%");
         } catch (Exception e) {
             // No se ha encontrado nada
         }

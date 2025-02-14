@@ -88,7 +88,17 @@ public class AccesoBD {
     }
 
     /**
+     * Función que elimina un objeto
+     *
+     * @param cosa Objeto a eliminar
+     */
+    public void borrar(Object cosa) {
+        session.delete(cosa);
+    }
+
+    /**
      * Función que devuelve una lista
+     *
      * @param namedQuery Nombre de la query
      * @return Lista
      */
@@ -97,9 +107,10 @@ public class AccesoBD {
 
         return query.getResultList();
     }
-    
+
     /**
      * Función que devuelve una lista buscada por un parámetro determinado
+     *
      * @param namedQuery Nombre de la query
      * @param parametro Nombre del parámetro
      * @param valor Valor del parámetro
@@ -110,9 +121,11 @@ public class AccesoBD {
 
         return query.getResultList();
     }
-    
+
     /**
-     * Función que devuelve una lista buscada por un parámetro determinado y su valor es int
+     * Función que devuelve una lista buscada por un parámetro determinado y su
+     * valor es int
+     *
      * @param namedQuery Nombre de la query
      * @param parametro Nombre del parámetro
      * @param valor Valor del parámetro (int)
@@ -123,23 +136,26 @@ public class AccesoBD {
 
         return query.getResultList();
     }
-    
+
     /**
-     * Función que devuelve una lista de compras filtradas por un rango de precios
+     * Función que devuelve una lista de compras filtradas por un rango de
+     * precios
+     *
      * @param valor1 Valor del precio inicial
      * @param valor2 Valor del precio final
      * @return Lista
      */
     public List<Compra> listarPorPrecio(double valor1, double valor2) {
         TypedQuery query = session.getNamedQuery("getComprasByPrice")
-            .setParameter("precioInicio", valor1)
-            .setParameter("precioFin", valor2);
+                .setParameter("precioInicio", valor1)
+                .setParameter("precioFin", valor2);
 
         return query.getResultList();
     }
 
     /**
      * Función que devuelve un objeto buscado por id
+     *
      * @param namedQuery Nombre de la query
      * @param id Id a buscar
      * @return Objeto
@@ -152,6 +168,7 @@ public class AccesoBD {
 
     /**
      * Función que busca por parámetro especificado
+     *
      * @param namedQuery Nombre de la query
      * @param parametro Nombre del parámetro
      * @param valor Valor del parámetro (String)
