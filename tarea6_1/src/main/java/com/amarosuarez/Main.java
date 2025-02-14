@@ -151,28 +151,24 @@ public class Main {
                     do {
                         Player player = null;
 
-                        System.out.println();
-                        System.out.println("¿Por qué campo deseas buscar al Player?");
-                        System.out.println("1. ID");
-                        System.out.println("2. Nick");
-                        System.out.println("3. Email");
-                        System.out.println("4. Volver");
-
-                        // Leemos la opcion
-                        opcionBuscarPlayer = scanner.nextInt();
-
-                        // Limpiamos el Scanner
-                        scanner.nextLine();
+                        // Leemos la opción
+                        opcionBuscarPlayer = Auxiliar.leeEntero(
+                            "¿Por qué campo deseas buscar al Player?\n" +
+                            "1. ID\n" +
+                            "2. Nick\n" + 
+                            "3. Email\n" +
+                            "4. Volver",
+                            scanner
+                        );
 
                         switch (opcionBuscarPlayer) {
                             case 1 -> {
                                 // Busca por ID
                                 int idPlayer;
 
-                                System.out.println();
-                                System.out.println("¿Cuál es el ID?");
-                                idPlayer = scanner.nextInt();
-
+                                // Leemos el ID
+                                idPlayer = Auxiliar.leeEntero("¿Cuál es el ID?", scanner);
+                                
                                 try {
                                     player = (Player) instancia.buscarPorId("getPlayerById", idPlayer);
 
@@ -252,30 +248,21 @@ public class Main {
                     int opcionGame = 0;
 
                     do {
-                        System.out.println();
-                        System.out.println("¿Por qué campo desea buscar el Game?");
-                        System.out.println("1. ID");
-                        System.out.println("2. Nombre");
-                        System.out.println("3. Volver");
-
                         // Obtenemos la opción
-                        opcionGame = scanner.nextInt();
-
-                        // Limpiamos el scanner
-                        scanner.nextLine();
+                        opcionGame = Auxiliar.leeEntero(
+                            "¿Por qué campo desea buscar el Game?\n" +
+                            "1. ID\n" +
+                            "2. Nombre\n" +
+                            "3. Volver",
+                            scanner
+                        );
 
                         switch (opcionGame) {
                             case 1:
                                 int idGame;
 
-                                // Preguntamos y leemos el id
-                                System.out.println();
-                                System.out.println("¿Cuál es el ID?");
-
-                                idGame = scanner.nextInt();
-
-                                // Limpiamos el scanner
-                                scanner.nextLine();
+                                // Leemos el ID
+                                idGame = Auxiliar.leeEntero("¿Cuál es el ID?", scanner);
 
                                 try {
                                     // Obtenemos el juego y lo mostramos por pantalla
@@ -339,20 +326,17 @@ public class Main {
                     int playerOption = 0;
 
                     do {
-                        System.out.println();
-                        System.out.println("¿Por qué campo deseas buscar la compra?");
-                        System.out.println("1. ID");
-                        System.out.println("2. Player");
-                        System.out.println("3. Game");
-                        System.out.println("4. Precio");
-                        System.out.println("5. Fecha de compra");
-                        System.out.println("6. Salir");
-
                         // Leemos la opción
-                        opcionCompra = scanner.nextInt();
-
-                        // Limpiamos el Scanner
-                        scanner.nextLine();
+                        opcionCompra = Auxiliar.leeEntero(
+                            "¿Por qué campo deseas buscar la compra?\n" + 
+                            "1. ID\n" +
+                            "2. Player\n" +
+                            "3. Game\n" +
+                            "4. Precio\n" +
+                            "5. Fecha de compra\n" +
+                            "6. Volver",
+                            scanner
+                        );
 
                         switch (opcionCompra) {
                             case 1:
@@ -360,13 +344,7 @@ public class Main {
                                 int idCompra;
 
                                 // Preguntamos y leemos el id
-                                System.out.println();
-                                System.out.println("¿Cuál es el ID de la compra?");
-
-                                idCompra = scanner.nextInt();
-
-                                // Limpiamos el Scanner
-                                scanner.nextLine();
+                                idCompra = Auxiliar.leeEntero("¿Cuál es el ID?", scanner);
 
                                 try {
                                     Compra compra = (Compra) instancia.buscarPorId("getCompraById", idCompra);
@@ -569,6 +547,16 @@ public class Main {
         }
     }
 
+    // Función que pinta el menú de añadir
+    private static void menuAnyadir() {
+        System.out.println();
+        System.out.println("¿Qué deseas añadir?");
+        System.out.println("1. Player");
+        System.out.println("2. Game");
+        System.out.println("3. Compra");
+        System.out.println("4. Volver al menú principal");
+    }
+
     // Función que muestra los resultados de la opción elegida de añadir
     private static void mostrarAnyadirOpcion(int opcionAnyadir) {
         try {
@@ -633,25 +621,19 @@ public class Main {
                     nombre = scanner.nextLine();
 
                     if (!nombre.equals("-1")) {
-                        System.out.println();
-                        System.out.println("¿Cuales son sus horas jugadas? (-1 para salir)");
-                        horas = scanner.nextInt();
-                        scanner.nextLine();
+                        // Pedimos las horas
+                        horas = Auxiliar.leeEntero("¿Cuáles son sus horas jugadas? (-1 para salir)", scanner);
 
                         if (horas != -1) {
                             do {
-                                System.out.println();
-                                System.out.println("¿Cuales son sus minutos jugados? (-1 para salir)");
-                                minutos = scanner.nextInt();
-                                scanner.nextLine();
+                                // Pedimos los minutos
+                                minutos = Auxiliar.leeEntero("¿Cuales son sus minutos jugados? (-1 para salir)", scanner);
                             } while (minutos > 59);
 
                             if (minutos != -1) {
                                 do {
-                                    System.out.println();
-                                    System.out.println("¿Cuales son sus segundos jugados? (-1 para salir)");
-                                    segundos = scanner.nextInt();
-                                    scanner.nextLine();
+                                    // Pedimos los segundos
+                                    segundos = Auxiliar.leeEntero("¿Cuales son sus segundos jugados? (-1 para salir)", scanner);
                                 } while (segundos > 59);
 
                                 if (segundos != -1) {
@@ -743,23 +725,20 @@ public class Main {
                                     int anyo;
 
                                     do {
-                                        System.out.println();
-                                        System.out.println("¿Cuál es el año de la compra? (-1 para salir)");
-                                        anyo = scanner.nextInt();
+                                        // Pedimos el año
+                                        anyo = Auxiliar.leeEntero("¿Cuál es el año de la compra? (-1 para salir)", scanner);
                                     } while ((anyo > 0 && anyo < 1900) || anyo < -1);
 
                                     if (anyo > 0) {
                                         do {
-                                            System.out.println();
-                                            System.out.println("¿Cuál es el mes de la compra? (-1 para salir)");
-                                            mes = scanner.nextInt();
+                                            // Pedimos el mes
+                                            mes = Auxiliar.leeEntero("¿Cuál es el mes de la compra? (-1 para salir)", scanner);
                                         } while (mes > 12 || mes < -1 || mes == 0);
 
                                         if (mes > 0) {
                                             do {
-                                                System.out.println();
-                                                System.out.println("¿Cuál es el día de la compra? (-1 para salir)");
-                                                dia = scanner.nextInt();
+                                                // Pedimos el día
+                                                dia = Auxiliar.leeEntero("¿Cuál es el dia de la compra? (-1 para salir)", scanner);
                                             } while (dia > 31
                                                     || dia < -1
                                                     || dia == 0
@@ -846,6 +825,9 @@ public class Main {
                             case 2 -> {
                                 eliminarGame();
                             }
+                            case 3 -> {
+                                eliminarCompra();
+                            }
                             case 4 -> {
                                 System.out.println("Volviendo...");
                             }
@@ -865,26 +847,23 @@ public class Main {
         int opcion;
 
         do {
-            System.out.println();
-            System.out.println("¿Por qué campo desea eliminar?");
-            System.out.println("1. ID");
-            System.out.println("2. Nick");
-            System.out.println("3. Email");
-            System.out.println("4. Volver");
-
-            // Leemos la opción y limpiamos el scanner
-            opcion = scanner.nextInt();
-            scanner.nextLine();
+            // Leemos la opción
+            opcion = Auxiliar.leeEntero(
+                "¿Por qué campo desea eliminar?\n" +
+                "1. ID\n" +
+                "2. Nick\n" +
+                "3. Email\n" +
+                "4. Volver",
+                scanner
+            );
 
             switch (opcion) {
                 case 1 -> {
                     // Por ID
                     int id;
 
-                    System.out.println();
-                    System.out.println("¿Cuál es el ID (-1 para salir)");
-                    id = scanner.nextInt();
-                    scanner.nextLine();
+                    // Pedimos el ID
+                    id = Auxiliar.leeEntero("¿Cuál es el ID? (-1 para salir)", scanner);
 
                     if (id > -1) {
                         try {
@@ -918,14 +897,9 @@ public class Main {
                                 Auxiliar.pintaPlayers(players);
 
                                 do {
-                                    System.out.println();
-                                    System.out.println(
-                                            "Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
-                                    playerOption = scanner.nextInt();
+                                    // Leemos la opción
+                                    playerOption = Auxiliar.leeEntero("Escribe el número de opción del player que deseas seleccionar (-1 para volver)", scanner);
                                 } while (playerOption > players.size());
-
-                                // Limpiamos el Scanner
-                                scanner.nextLine();
                             }
 
                             if (playerOption != -1) {
@@ -990,24 +964,22 @@ public class Main {
         int opcion;
 
         do {
-            System.out.println();
-            System.out.println("¿Por qué campo desea eliminar?");
-            System.out.println("1. ID");
-            System.out.println("2. Nombre");
-            System.out.println("3. Volver");
-
-            opcion = scanner.nextInt();
-            scanner.nextLine();
+            // Leemos la opción
+            opcion = Auxiliar.leeEntero(
+                "¿Por qué campo desea eliminar?\n" +
+                "1. ID\n" +
+                "2. Nombre\n" +
+                "3. Volver",
+                scanner
+            );
 
             switch (opcion) {
                 case 1 -> {
                     // POR ID
                     int id;
 
-                    System.out.println();
-                    System.out.println("¿Cuál es el ID? (-1 para salir)");
-                    id = scanner.nextInt();
-                    scanner.nextLine();
+                    // Leemos el ID
+                    id = Auxiliar.leeEntero("¿Cuál es el ID? (-1 para salir)", scanner);
 
                     if (id > -1) {
                         try {
@@ -1060,13 +1032,30 @@ public class Main {
         } while (opcion != 3);
     }
 
-    // Función que pinta el menú de añadir
-    private static void menuAnyadir() {
-        System.out.println();
-        System.out.println("¿Qué deseas añadir?");
-        System.out.println("1. Player");
-        System.out.println("2. Game");
-        System.out.println("3. Compra");
-        System.out.println("4. Volver al menú principal");
+    // Función que elimina una compra
+    private static void eliminarCompra() {
+        int opcion;
+
+        do {
+            // Leemos la opción
+            opcion = Auxiliar.leeEntero(
+                "¿Por qué campo desea eliminar?\n" +
+                "1. ID\n" +
+                "2. Player\n" +
+                "3. Game\n" +
+                "4. Precio\n" +
+                "5. Fecha de compra\n" +
+                "6. Volver",
+                scanner
+            );
+
+            switch (opcion) {
+                case 1 -> {
+                    int id;
+
+                    id = Auxiliar.leeEntero("¿Cuál es el ID?", scanner);
+                }
+            }
+        } while (opcion != 6);
     }
 }

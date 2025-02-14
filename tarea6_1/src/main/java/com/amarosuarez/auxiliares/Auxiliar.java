@@ -1,5 +1,6 @@
 package com.amarosuarez.auxiliares;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -198,5 +199,37 @@ public class Auxiliar {
         } while (opcion > lista.size());
 
         return opcion;
+    }
+
+    /**
+     * Función que muestra un mensaje, pide un entero y lo devuelve
+     * @param message Mensaje a mostrar
+     * @param scanner Scanner para leer
+     * @return Entero
+     */
+    public static int leeEntero(String message, Scanner scanner) {
+        int res = 0;
+        boolean pasado = false;
+        
+        do {
+            try {
+                // Mostramos el mensaje
+                System.out.println();
+                System.out.println(message);
+
+                // Leemos la respuesta
+                res = scanner.nextInt();
+
+                // Cambiamos el boolean
+                pasado = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Debe escribir un número entero");
+            } finally {
+                // Limpiamos el Scanner
+                scanner.nextLine();
+            }
+        } while (!pasado);
+
+        return res;
     }
 }
