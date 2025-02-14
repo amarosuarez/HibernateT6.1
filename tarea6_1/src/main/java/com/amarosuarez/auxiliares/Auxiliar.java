@@ -196,7 +196,7 @@ public class Auxiliar {
 
             // Limpiamos el Scanner
             scanner.nextLine();
-        } while (opcion > lista.size());
+        } while (opcion >= lista.size() || opcion < -1);
 
         return opcion;
     }
