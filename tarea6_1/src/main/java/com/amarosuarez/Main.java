@@ -836,7 +836,7 @@ public class Main {
 
                             // Limpiamos el Scanner
                             scanner.nextLine();
-                            
+
                         }
 
                         if (playerOption != -1) {
@@ -853,7 +853,7 @@ public class Main {
                             List<Game> games = getAllGames(gameName);
 
                             if (games != null && !games.isEmpty()) {
-                                if (games.size() >= 1) {
+                                if (games.size() > 1) {
                                     for (int i = 0; i < games.size(); i++) {
                                         Game game = games.get(i);
                                         System.out.println("-----------------");
@@ -891,30 +891,46 @@ public class Main {
                                     int mes;
                                     int anyo;
 
-                                    System.out.println();
-                                    System.out.println("¿Cuál es el año de la compra?");
-                                    anyo = scanner.nextInt();
-
-                                    System.out.println();
-                                    System.out.println("¿Cuál es el mes de la compra?");
-                                    mes = scanner.nextInt();
-
                                     do {
                                         System.out.println();
-                                        System.out.println("¿Cuál es el día de la compra?");
-                                        dia = scanner.nextInt();
-                                    } while(
-                                        dia > 31 ||
-                                        dia < 1 ||
-                                        ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) ||
-                                        (Year.isLeap(anyo) && mes == 2 && dia > 29) ||
-                                        (!Year.isLeap(anyo) && mes == 2 && dia > 28)
-                                    );
+                                        System.out.println("¿Cuál es el año de la compra? (-1 para salir)");
+                                        anyo = scanner.nextInt();
+                                    } while ((anyo > 0 && anyo < 1900) || anyo < -1);
 
-                                    String fecha = dia + "/" + mes + "/" + anyo;
+                                    if (anyo > 0) {
+                                        do {
+                                            System.out.println();
+                                            System.out.println("¿Cuál es el mes de la compra? (-1 para salir)");
+                                            mes = scanner.nextInt();
+                                        } while (mes > 12 || mes < -1 || mes == 0);
 
-                                    Compra compra = new Compra(player.getIdPlayer(), game.getIdGame(), game.getNombre(), precio, fecha);
-                                    instancia.guardar(compra);
+                                        if (mes > 0) {
+                                            do {
+                                                System.out.println();
+                                                System.out.println("¿Cuál es el día de la compra? (-1 para salir)");
+                                                dia = scanner.nextInt();
+                                            } while (dia > 31
+                                                    || dia < -1
+                                                    || dia == 0
+                                                    || ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30)
+                                                    || (Year.isLeap(anyo) && mes == 2 && dia > 29)
+                                                    || (!Year.isLeap(anyo) && mes == 2 && dia > 28));
+
+                                            if (dia > 0) {
+                                                String fecha = anyo + "-" + (mes > 9 ? mes : "0" + mes) + "-" + (dia > 9 ? dia : "0" + dia);
+
+                                                Compra compra = new Compra(player.getIdPlayer(), game.getIdGame(), game.getNombre(), precio, fecha);
+                                                instancia.guardar(compra);
+                                                System.out.println("Compra guardada con éxito");
+                                            } else {
+                                                System.out.println("Volviendo...");
+                                            }
+                                        } else {
+                                            System.out.println("Volviendo...");
+                                        }
+                                    } else {
+                                        System.out.println("Volviendo...");
+                                    }
                                 } else {
                                     System.out.println("Volviendo...");
                                 }
@@ -947,8 +963,8 @@ public class Main {
         try {
             // Buscamos al player
             players = instancia.buscarPorParametro("getPlayersByNick", "nick",
-            "%" + nick + "%");
-        } catch(Exception e) {
+                    "%" + nick + "%");
+        } catch (Exception e) {
             // No se ha encontrado nada
         }
 
@@ -962,8 +978,8 @@ public class Main {
         try {
             // Buscamos los games
             games = instancia.buscarPorParametro("getGamesByName", "nombre",
-            "%" + name + "%");
-        } catch(Exception e) {
+                    "%" + name + "%");
+        } catch (Exception e) {
             // No se ha encontrado nada
         }
 
