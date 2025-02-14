@@ -84,6 +84,7 @@ public class Main {
                         // Ejecutamos la opción seleccioanda
                         mostrarEliminarOpcion(opcionEliminar);
                     } while (opcionEliminar != 4);
+                    System.out.println("Volviendo...");
                 }
                 case 5 ->
                     System.out.println("Hasta la próxima!");
@@ -441,15 +442,7 @@ public class Main {
                                 if (players != null && !players.isEmpty()) {
                                     if (players.size() > 1) {
 
-                                        for (int i = 0; i < players.size(); i++) {
-                                            Player playerO = players.get(i);
-                                            System.out.println("-----------------");
-                                            System.out.println("Opción " + i);
-                                            System.out.println("ID -> " + playerO.getIdPlayer());
-                                            System.out.println("Nick -> " + playerO.getNick());
-                                            System.out.println("Email -> " + playerO.getEmail());
-                                        }
-                                        System.out.println("-----------------");
+                                        pintaPlayers(players);
 
                                         do {
                                             System.out.println();
@@ -515,15 +508,7 @@ public class Main {
                                     if (!games.isEmpty()) {
 
                                         if (games.size() > 1) {
-                                            for (int i = 0; i < games.size(); i++) {
-                                                Game game = games.get(i);
-                                                System.out.println("-----------------");
-                                                System.out.println("Opción " + i);
-                                                System.out.println("ID -> " + game.getIdGame());
-                                                System.out.println("Nombre -> " + game.getNombre());
-                                                System.out.println("Tiempo jugado -> " + game.getTiempoJugado());
-                                            }
-                                            System.out.println("-----------------");
+                                            pintaGames(games);
 
                                             do {
                                                 System.out.println();
@@ -830,15 +815,7 @@ public class Main {
                     if (players != null && !players.isEmpty()) {
                         if (players.size() > 1) {
 
-                            for (int i = 0; i < players.size(); i++) {
-                                Player playerO = players.get(i);
-                                System.out.println("-----------------");
-                                System.out.println("Opción " + i);
-                                System.out.println("ID -> " + playerO.getIdPlayer());
-                                System.out.println("Nick -> " + playerO.getNick());
-                                System.out.println("Email -> " + playerO.getEmail());
-                            }
-                            System.out.println("-----------------");
+                            pintaPlayers(players);
 
                             do {
                                 System.out.println();
@@ -867,15 +844,7 @@ public class Main {
 
                             if (games != null && !games.isEmpty()) {
                                 if (games.size() > 1) {
-                                    for (int i = 0; i < games.size(); i++) {
-                                        Game game = games.get(i);
-                                        System.out.println("-----------------");
-                                        System.out.println("Opción " + i);
-                                        System.out.println("ID -> " + game.getIdGame());
-                                        System.out.println("Nombre -> " + game.getNombre());
-                                        System.out.println("Tiempo jugado -> " + game.getTiempoJugado());
-                                    }
-                                    System.out.println("-----------------");
+                                    pintaGames(games);
 
                                     do {
                                         System.out.println();
@@ -969,6 +938,19 @@ public class Main {
         }
     }
 
+    // Función que pinta los games
+    private static void pintaGames(List<Game> games) {
+        for (int i = 0; i < games.size(); i++) {
+            Game game = games.get(i);
+            System.out.println("-----------------");
+            System.out.println("Opción " + i);
+            System.out.println("ID -> " + game.getIdGame());
+            System.out.println("Nombre -> " + game.getNombre());
+            System.out.println("Tiempo jugado -> " + game.getTiempoJugado());
+        }
+        System.out.println("-----------------");
+    }
+
     // Función que pinta el menú de eliminar
     private static void menuEliminar() {
         System.out.println();
@@ -1004,6 +986,12 @@ public class Main {
                         switch (tabla) {
                             case 1 -> {
                                 eliminarPlayer();
+                            }
+                            case 2 -> {
+                                eliminarGame();
+                            }
+                            case 4 -> {
+                                System.out.println("Volviendo...");
                             }
                         }
                     } while (tabla != 4);
@@ -1046,25 +1034,9 @@ public class Main {
                         try {
                             Player player = (Player) instancia.buscarPorId("getPlayerById", id);
 
-                            System.out.println();
-                            System.out.println("El player elegido es:");
-                            System.out.println("ID -> " + player.getIdPlayer());
-                            System.out.println("Nick -> " + player.getNick());
-                            System.out.println("Email -> " + player.getEmail());
+                            muestraPlayerElegido(player);
 
-                            String confirm;
-                            do {
-                                System.out.println();
-                                System.out.println("¿Está seguro de que desea eliminarlo? (y/n)");
-                                confirm = scanner.nextLine();
-
-                                if (confirm.equalsIgnoreCase("y")) {
-                                    instancia.borrar(player);
-                                    System.out.println("Player eliminado");
-                                } else if (confirm.equalsIgnoreCase("n")) {
-                                    System.out.println("Operación cancelada");
-                                }
-                            } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
+                            confirmDelete(player, "Player");
                         } catch (Exception e) {
                             System.out.println("No se ha encontrado ningún player con ese ID");
                         }
@@ -1087,15 +1059,7 @@ public class Main {
 
                         if (players != null && !players.isEmpty()) {
                             if (players.size() > 1) {
-                                for (int i = 0; i < players.size(); i++) {
-                                    Player playerO = players.get(i);
-                                    System.out.println("-----------------");
-                                    System.out.println("Opción " + i);
-                                    System.out.println("ID -> " + playerO.getIdPlayer());
-                                    System.out.println("Nick -> " + playerO.getNick());
-                                    System.out.println("Email -> " + playerO.getEmail());
-                                }
-                                System.out.println("-----------------");
+                                pintaPlayers(players);
 
                                 do {
                                     System.out.println();
@@ -1110,25 +1074,9 @@ public class Main {
 
                             if (playerOption != -1) {
                                 player = players.get(playerOption);
-                                System.out.println();
-                                System.out.println("El player elegido es:");
-                                System.out.println("ID -> " + player.getIdPlayer());
-                                System.out.println("Nick -> " + player.getNick());
-                                System.out.println("Email -> " + player.getEmail());
+                                muestraPlayerElegido(player);
 
-                                String confirm;
-                                do {
-                                    System.out.println();
-                                    System.out.println("¿Está seguro de que desea eliminarlo? (y/n)");
-                                    confirm = scanner.nextLine();
-
-                                    if (confirm.equalsIgnoreCase("y")) {
-                                        instancia.borrar(player);
-                                        System.out.println("Player eliminado");
-                                    } else if (confirm.equalsIgnoreCase("n")) {
-                                        System.out.println("Operación cancelada");
-                                    }
-                                } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
+                                confirmDelete(player, "Player");
                             } else {
                                 System.out.println("Volviendo...");
                             }
@@ -1154,48 +1102,16 @@ public class Main {
 
                         if (players != null && !players.isEmpty()) {
                             if (players.size() > 1) {
-                                for (int i = 0; i < players.size(); i++) {
-                                    Player playerO = players.get(i);
-                                    System.out.println("-----------------");
-                                    System.out.println("Opción " + i);
-                                    System.out.println("ID -> " + playerO.getIdPlayer());
-                                    System.out.println("Nick -> " + playerO.getNick());
-                                    System.out.println("Email -> " + playerO.getEmail());
-                                }
-                                System.out.println("-----------------");
+                                pintaPlayers(players);
 
-                                do {
-                                    System.out.println();
-                                    System.out.println(
-                                            "Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
-                                    playerOption = scanner.nextInt();
-                                } while (playerOption > players.size());
-
-                                // Limpiamos el Scanner
-                                scanner.nextLine();
+                                playerOption = pideElegirOpcionObjeto(players, "player");
                             }
 
                             if (playerOption != -1) {
                                 player = players.get(playerOption);
-                                System.out.println();
-                                System.out.println("El player elegido es:");
-                                System.out.println("ID -> " + player.getIdPlayer());
-                                System.out.println("Nick -> " + player.getNick());
-                                System.out.println("Email -> " + player.getEmail());
+                                muestraPlayerElegido(player);
 
-                                String confirm;
-                                do {
-                                    System.out.println();
-                                    System.out.println("¿Está seguro de que desea eliminarlo? (y/n)");
-                                    confirm = scanner.nextLine();
-
-                                    if (confirm.equalsIgnoreCase("y")) {
-                                        instancia.borrar(player);
-                                        System.out.println("Player eliminado");
-                                    } else if (confirm.equalsIgnoreCase("n")) {
-                                        System.out.println("Operación cancelada");
-                                    }
-                                } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
+                                confirmDelete(player, "Player");
                             } else {
                                 System.out.println("Volviendo...");
                             }
@@ -1206,8 +1122,150 @@ public class Main {
                         System.out.println("Volviendo...");
                     }
                 }
+                case 4 -> {
+                    System.out.println("Volviendo...");
+                }
             }
         } while (opcion != 4);
+    }
+
+    // Función que muestra el player elegido para eliminar
+    private static void muestraPlayerElegido(Player player) {
+        System.out.println();
+        System.out.println("El player elegido es:");
+        System.out.println("ID -> " + player.getIdPlayer());
+        System.out.println("Nick -> " + player.getNick());
+        System.out.println("Email -> " + player.getEmail());
+    }
+
+    // Función que pinta todos los players
+    private static void pintaPlayers(List<Player> players) {
+        for (int i = 0; i < players.size(); i++) {
+            Player playerO = players.get(i);
+            System.out.println("-----------------");
+            System.out.println("Opción " + i);
+            System.out.println("ID -> " + playerO.getIdPlayer());
+            System.out.println("Nick -> " + playerO.getNick());
+            System.out.println("Email -> " + playerO.getEmail());
+        }
+        System.out.println("-----------------");
+    }
+
+    // Función que elimina un game
+    private static void eliminarGame() {
+        int opcion;
+
+        do {
+            System.out.println();
+            System.out.println("¿Por qué campo desea eliminar?");
+            System.out.println("1. ID");
+            System.out.println("2. Nombre");
+            System.out.println("3. Volver");
+
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcion) {
+                case 1 -> {
+                    // POR ID
+                    int id;
+
+                    System.out.println();
+                    System.out.println("¿Cuál es el ID? (-1 para salir)");
+                    id = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (id > -1) {
+                        try {
+                            Game game = (Game) instancia.buscarPorId("getGameById", id);
+
+                            muestraGameElegido(game);
+                            
+                            confirmDelete(game, "Game");
+                        } catch (Exception e) {
+                            System.out.println("No se ha encontrado ningún game con ese ID");
+                        }
+                    } else {
+                        System.out.println("Volviendo...");
+                    }
+                }
+                case 2 -> {
+                    // Por nombre
+                    String name;
+
+                    System.out.println();
+                    System.out.println("¿Cuál es el nombre (-1 para salir)");
+                    name = scanner.nextLine();
+
+                    if (!name.equals("-1")) {
+                        int gameOption = 0;
+                        Game game;
+                        List<Game> games = getAllGames(name);
+
+                        if (games != null && !games.isEmpty()) {
+                            if (games.size() > 1) {
+                                pintaGames(games);
+
+                                gameOption = pideElegirOpcionObjeto(games, "game");
+                            }
+
+                            if (gameOption != -1) {
+                                game = games.get(gameOption);
+                                muestraGameElegido(game);
+
+                                confirmDelete(game, "Game");
+                            } else {
+                                System.out.println("Volviendo...");
+                            }
+                        } else {
+                            System.out.println("No se ha encontrado ningún game con ese nombre");
+                        }
+                    }
+                }
+            }
+        } while (opcion != 3);
+    }
+
+    // Función que muestra el game elegido para eliminar
+    private static void muestraGameElegido(Game game) {
+        System.out.println();
+        System.out.println("El game elegido es:");
+        System.out.println("ID -> " + game.getIdGame());
+        System.out.println("Nombre -> " + game.getNombre());
+        System.out.println("Tiempo jugado -> " + game.getTiempoJugado());
+    }
+
+    // Función que confirma el borrado
+    private static void confirmDelete(Object object, String tag) {
+        String confirm;
+        do {
+            System.out.println();
+            System.out.println("¿Está seguro de que desea eliminarlo? (y/n)");
+            confirm = scanner.nextLine();
+
+            if (confirm.equalsIgnoreCase("y")) {
+                instancia.borrar(object);
+                System.out.println(tag + " eliminado");
+            } else if (confirm.equalsIgnoreCase("n")) {
+                System.out.println("Operación cancelada");
+            }
+        } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
+    }
+
+    // Función que devuelve la opción del objeto elegido
+    private static int pideElegirOpcionObjeto(List lista, String tag) {
+        int opcion;
+        do {
+            System.out.println();
+            System.out.println(
+                    "Escribe el número de opción del " + tag + " que deseas seleccionar (-1 para volver)");
+            opcion = scanner.nextInt();
+
+            // Limpiamos el Scanner
+            scanner.nextLine();
+        } while (opcion > lista.size());
+
+        return opcion;
     }
 
     // Función que obtiene todos los players con un nick
