@@ -10,7 +10,12 @@ import com.amarosuarez.entities.Game;
 import com.amarosuarez.entities.Player;
 
 public class Auxiliar {
-    // Función que pinta todos los players
+    private static Scanner scanner = new Scanner(System.in);
+
+    /**
+     * Función que lista una serie de players
+     * @param players Lista de Players
+     */
     public static void listaPlayers(List<Player> players) {
         for (int i = 0; i < players.size(); i++) {
             Player playerO = players.get(i);
@@ -22,7 +27,10 @@ public class Auxiliar {
         System.out.println("-----------------");
     }
 
-    // Función que pinta todas las opciones de players
+    /**
+     * Función que pinta una serie de players con opción
+     * @param players Lista de Players
+     */
     public static void pintaPlayers(List<Player> players) {
         for (int i = 0; i < players.size(); i++) {
             Player playerO = players.get(i);
@@ -35,7 +43,10 @@ public class Auxiliar {
         System.out.println("-----------------");
     }
 
-    // Función que pinta un player
+    /**
+     * Función que pinta un player por pantalla
+     * @param player Player a pintar
+     */
     public static void pintaUnPlayer(Player player) {
         System.out.println("-----------------");
         System.out.println("ID -> " + player.getIdPlayer());
@@ -44,7 +55,10 @@ public class Auxiliar {
         System.out.println("-----------------");
     }
 
-    // Función que muestra el player elegido para eliminar
+    /**
+     * Función que muestra el player elegido a eliminar
+     * @param player Player elegido
+     */
     public static void muestraPlayerElegido(Player player) {
         System.out.println();
         System.out.println("El player elegido es:");
@@ -53,7 +67,10 @@ public class Auxiliar {
         System.out.println("Email -> " + player.getEmail());
     }
 
-    // Función que lista los games
+    /**
+     * Función que lista una serie de games
+     * @param games
+     */
     public static void listaGames(List<Game> games) {
         for (int i = 0; i < games.size(); i++) {
             Game game = games.get(i);
@@ -65,7 +82,10 @@ public class Auxiliar {
         System.out.println("-----------------");
     }
 
-    // Función que pinta las opciones de games
+    /**
+     * Función que pinta una lista una serie de games con opciones
+     * @param games Lista de games
+     */
     public static void pintaGames(List<Game> games) {
         for (int i = 0; i < games.size(); i++) {
             Game game = games.get(i);
@@ -78,7 +98,10 @@ public class Auxiliar {
         System.out.println("-----------------");
     }
 
-    // Función que pinta un game
+    /**
+     * Función que pinta un game por pantalla
+     * @param game Game a pintar
+     */
     public static void pintaUnGame(Game game) {
         System.out.println("-----------------");
         System.out.println("ID -> " + game.getIdGame());
@@ -87,7 +110,10 @@ public class Auxiliar {
         System.out.println("-----------------");
     }
 
-    // Función que muestra el game elegido para eliminar
+    /**
+     * Función que muestra el game elegido a eliminar
+     * @param game Game elegido
+     */
     public static void muestraGameElegido(Game game) {
         System.out.println();
         System.out.println("El game elegido es:");
@@ -96,7 +122,11 @@ public class Auxiliar {
         System.out.println("Tiempo jugado -> " + game.getTiempoJugado());
     }
 
-    // Función que lista compras
+    /**
+     * Función que lista una serie de compras
+     * @param compras Lista de compras
+     * @param instancia Instancia a la base de datos
+     */
     public static void listaCompras(List<Compra> compras, AccesoBD instancia) {
         for (Compra compra : compras) {
             // Buscamos al jugador
@@ -112,7 +142,11 @@ public class Auxiliar {
         System.out.println("-----------------");
     }
 
-    // Función que pinta una compra
+    /**
+     * Función que pinta una compra en pantalla
+     * @param compra Compra
+     * @param player Player
+     */
     public static void pintaUnaCompra(Compra compra, Player player) {
         System.out.println("-----------------");
         System.out.println("ID -> " + compra.getIdCompra());
@@ -123,7 +157,12 @@ public class Auxiliar {
         System.out.println("-----------------");
     }
 
-    // Función que obtiene todos los players con un nick
+    /**
+     * Función que obtiene todos los players que coincidan con un nick
+     * @param nick Nick del player a buscar
+     * @param instancia Instancia a la base de datos
+     * @return Lista de players
+     */
     public static List<Player> getAllPlayersByNick(String nick, AccesoBD instancia) {
         List<Player> players = null;
 
@@ -138,7 +177,12 @@ public class Auxiliar {
         return players;
     }
 
-    // Función que obtiene todos los players con un email
+    /**
+     * Función que obtiene todos los players que coincidan con un email
+     * @param email Email del player a buscar
+     * @param instancia Instancia a la base de datos
+     * @return Lista de Players
+     */
     public static List<Player> getAllPlayersByEmail(String email, AccesoBD instancia) {
         List<Player> players = null;
 
@@ -153,8 +197,13 @@ public class Auxiliar {
         return players;
     }
 
-    // Función que obtiene todos los games con su name
-    public static List<Game> getAllGames(String name, AccesoBD instancia) {
+    /**
+     * Función que obtiene todos los juegos que coinciden con un nombre
+     * @param name Nombre del juego a buscar
+     * @param instancia Instancia a la base de datos
+     * @return Lista de Game
+     */
+    public static List<Game> getAllGamesByName(String name, AccesoBD instancia) {
         List<Game> games = null;
 
         try {
@@ -168,8 +217,14 @@ public class Auxiliar {
         return games;
     }
 
-    // Función que confirma el borrado
-    public static void confirmDelete(Object object, String tag, AccesoBD instancia, Scanner scanner) {
+    /**
+     * Función que recibe un objeto, un tag y una instancia a la base de datos y pide
+     * la confirmación de la eliminación
+     * @param object Objeto a eliminar
+     * @param tag Tag del objeto
+     * @param instancia Instancia a la base de datos
+     */
+    public static void confirmDelete(Object object, String tag, AccesoBD instancia) {
         String confirm;
         do {
             System.out.println();
@@ -185,8 +240,13 @@ public class Auxiliar {
         } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
     }
 
-    // Función que devuelve la opción del objeto elegido
-    public static int pideElegirOpcionObjeto(List lista, String tag, Scanner scanner) {
+    /**
+     * Función que muestra una serie de opciones y pide que se elija uno
+     * @param listaSize Tamaño de la lista
+     * @param tag Tag del objeto
+     * @return Opción elegida
+     */
+    public static int pideElegirOpcionObjeto(int listaSize, String tag) {
         int opcion;
         do {
             System.out.println();
@@ -196,7 +256,7 @@ public class Auxiliar {
 
             // Limpiamos el Scanner
             scanner.nextLine();
-        } while (opcion >= lista.size() || opcion < -1);
+        } while (opcion >= listaSize || opcion < -1);
 
         return opcion;
     }
@@ -204,10 +264,9 @@ public class Auxiliar {
     /**
      * Función que muestra un mensaje, pide un entero y lo devuelve
      * @param message Mensaje a mostrar
-     * @param scanner Scanner para leer
      * @return Entero
      */
-    public static int leeEntero(String message, Scanner scanner) {
+    public static int leeEntero(String message) {
         int res = 0;
         boolean pasado = false;
         
@@ -229,6 +288,53 @@ public class Auxiliar {
                 scanner.nextLine();
             }
         } while (!pasado);
+
+        return res;
+    }
+
+    /**
+     * Función que muestra un mensaje, pide un double y lo devuelve
+     * @param message Mensaje a mostrar
+     * @return Double
+     */
+    public static double leeDouble(String message) {
+        double res = 0;
+        boolean pasado = false;
+        
+        do {
+            try {
+                // Mostramos el mensaje
+                System.out.println();
+                System.out.println(message);
+
+                // Leemos la respuesta
+                res = scanner.nextDouble();
+
+                // Cambiamos el boolean
+                pasado = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Debe escribir un número entero");
+            } finally {
+                // Limpiamos el Scanner
+                scanner.nextLine();
+            }
+        } while (!pasado);
+
+        return res;
+    }
+
+
+    /**
+     * Función que muestra un mensaje, pide un String y lo devuelve
+     * @param message
+     * @return String
+     */
+    public static String leeString(String message) {
+        String res = "";
+
+        System.out.println();
+        System.out.println(message);
+        res = scanner.nextLine();
 
         return res;
     }

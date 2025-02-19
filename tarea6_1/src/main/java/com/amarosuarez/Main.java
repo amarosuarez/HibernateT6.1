@@ -2,7 +2,6 @@ package com.amarosuarez;
 
 import java.time.Year;
 import java.util.List;
-import java.util.Scanner;
 import java.util.logging.Level;
 
 import com.amarosuarez.auxiliares.Auxiliar;
@@ -14,7 +13,6 @@ import com.amarosuarez.entities.Player;
 public class Main {
 
     private static AccesoBD instancia;
-    private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
@@ -23,13 +21,10 @@ public class Main {
 
         do {
             // Mostramos el menú
-            menu();
-
             // Recogemos la opción seleccionada
-            opcion = scanner.nextInt();
-
-            // Limpiamos el scanner
-            scanner.nextLine();
+            opcion = Auxiliar.leeEntero(
+                menu()
+            );
 
             switch (opcion) {
                 case 1 -> {
@@ -38,13 +33,8 @@ public class Main {
 
                     do {
                         // Mostramos el menú de listar
-                        menuListar();
-
                         // Recogemos la opción elegida
-                        opcionListar = scanner.nextInt();
-
-                        // Limpiamos el scanner
-                        scanner.nextLine();
+                        opcionListar = Auxiliar.leeEntero(menuListar());
 
                         // Ejecutamos la opción seleccionada
                         mostrarListarOpcion(opcionListar);
@@ -59,10 +49,7 @@ public class Main {
                         menuAnyadir();
 
                         // Recogemos la opción elegida
-                        opcionAnyadir = scanner.nextInt();
-
-                        // Limpiamos el scanner
-                        scanner.nextLine();
+                        opcionAnyadir = Auxiliar.leeEntero("");
 
                         // Ejecutamos la opción seleccioanda
                         mostrarAnyadirOpcion(opcionAnyadir);
@@ -77,10 +64,7 @@ public class Main {
                         menuEliminar();
 
                         // Recogemos la opción elegida
-                        opcionEliminar = scanner.nextInt();
-
-                        // Limpiamos el Scanner
-                        scanner.nextLine();
+                        opcionEliminar = Auxiliar.leeEntero("");
 
                         // Ejecutamos la opción seleccioanda
                         mostrarEliminarOpcion(opcionEliminar);
@@ -98,26 +82,29 @@ public class Main {
     }
 
     // Función que pinta el menú general
-    private static void menu() {
-        System.out.println("¿Qué desea hacer?");
-        System.out.println("1. Listar");
-        System.out.println("2. Añadir");
-        System.out.println("3. Editar");
-        System.out.println("4. Eliminar");
-        System.out.println("5. Salir");
+    private static String menu() {
+        String menu = "¿Qué desea hacer?\n";
+        menu += "1. Listar\n";
+        menu += "2. Añadir\n";
+        menu += "3. Editar\n";
+        menu += "4. Eliminar\n";
+        menu += "5. Salir";
+
+        return menu;
     }
 
     // Función que pinta el menú de listar
-    private static void menuListar() {
-        System.out.println();
-        System.out.println("¿Qué desea listar?");
-        System.out.println("1. Todos los jugadores");
-        System.out.println("2. Un jugador");
-        System.out.println("3. Todos los juegos");
-        System.out.println("4. Un juego");
-        System.out.println("5. Todas las compras");
-        System.out.println("6. Una compra");
-        System.out.println("7. Volver al menú principal");
+    private static String menuListar() {
+        String menu = "\n";
+        menu += "¿Qué desea listar?\n";
+        menu += "1. Todos los jugadores\n";
+        menu += "2. Un jugador\n";
+        menu += "3. Todos los juegos\n";
+        menu += "4. Un juego\n";
+        menu += "5. Todas las compras\n";
+        menu += "6. Una compra\n";
+        menu += "7. Volver al menú principal";
+        return menu;
     }
 
     // Función que muestra los resultados de la opción elegida de listar
@@ -155,10 +142,9 @@ public class Main {
                         opcionBuscarPlayer = Auxiliar.leeEntero(
                             "¿Por qué campo deseas buscar al Player?\n" +
                             "1. ID\n" +
-                            "2. Nick\n" + 
+                            "2. Nick\n" +
                             "3. Email\n" +
-                            "4. Volver",
-                            scanner
+                            "4. Volver"
                         );
 
                         switch (opcionBuscarPlayer) {
@@ -167,7 +153,7 @@ public class Main {
                                 int idPlayer;
 
                                 // Leemos el ID
-                                idPlayer = Auxiliar.leeEntero("¿Cuál es el ID?", scanner);
+                                idPlayer = Auxiliar.leeEntero("¿Cuál es el ID?");
                                 
                                 try {
                                     player = (Player) instancia.buscarPorId("getPlayerById", idPlayer);
@@ -182,9 +168,7 @@ public class Main {
                                 // Busca por nick
                                 String nick;
 
-                                System.out.println();
-                                System.out.println("¿Cuál es el nick?");
-                                nick = scanner.nextLine();
+                                nick = Auxiliar.leeString("¿Cuál es el nick?");
 
                                 try {
                                     List<Player> players = instancia.buscarPorParametro("getPlayersByNick", "nick",
@@ -204,9 +188,7 @@ public class Main {
                                 // Busca por email
                                 String email;
 
-                                System.out.println();
-                                System.out.println("¿Cuál es el email?");
-                                email = scanner.nextLine();
+                                email = Auxiliar.leeString("¿Cuál es el email?");
 
                                 try {
                                     List<Player> players = instancia.buscarPorParametro("getPlayersByEmail", "email",
@@ -253,8 +235,7 @@ public class Main {
                             "¿Por qué campo desea buscar el Game?\n" +
                             "1. ID\n" +
                             "2. Nombre\n" +
-                            "3. Volver",
-                            scanner
+                            "3. Volver"
                         );
 
                         switch (opcionGame) {
@@ -262,7 +243,7 @@ public class Main {
                                 int idGame;
 
                                 // Leemos el ID
-                                idGame = Auxiliar.leeEntero("¿Cuál es el ID?", scanner);
+                                idGame = Auxiliar.leeEntero("¿Cuál es el ID?");
 
                                 try {
                                     // Obtenemos el juego y lo mostramos por pantalla
@@ -281,7 +262,7 @@ public class Main {
                                 // Preguntamos y leemos el nombre del juego
                                 System.out.println();
                                 System.out.println("¿Cuál es el nombre del Game?");
-                                nombreJuego = scanner.nextLine();
+                                nombreJuego = Auxiliar.leeString("¿Cuál es el nombre del Game?");
 
                                 try {
                                     // Obtenemos todos los juegos con ese nombre o que lo contengan
@@ -328,14 +309,13 @@ public class Main {
                     do {
                         // Leemos la opción
                         opcionCompra = Auxiliar.leeEntero(
-                            "¿Por qué campo deseas buscar la compra?\n" + 
+                            "¿Por qué campo deseas buscar la compra?\n" +
                             "1. ID\n" +
                             "2. Player\n" +
                             "3. Game\n" +
                             "4. Precio\n" +
                             "5. Fecha de compra\n" +
-                            "6. Volver",
-                            scanner
+                            "6. Volver"
                         );
 
                         switch (opcionCompra) {
@@ -344,7 +324,7 @@ public class Main {
                                 int idCompra;
 
                                 // Preguntamos y leemos el id
-                                idCompra = Auxiliar.leeEntero("¿Cuál es el ID?", scanner);
+                                idCompra = Auxiliar.leeEntero("¿Cuál es el ID?");
 
                                 try {
                                     Compra compra = (Compra) instancia.buscarPorId("getCompraById", idCompra);
@@ -362,11 +342,7 @@ public class Main {
                                 // Busca la compra por el nick del player
                                 String nickPlayer;
 
-                                // Preguntamos el nick del player y la leemos
-                                System.out.println();
-                                System.out.println("¿Cuál es el nick del player?");
-
-                                nickPlayer = scanner.nextLine();
+                                nickPlayer = Auxiliar.leeString("¿Cuál es el nick del player?");
 
                                 List<Player> players = Auxiliar.getAllPlayersByNick(nickPlayer, instancia);
 
@@ -375,7 +351,7 @@ public class Main {
                                         // Pintamos los players
                                         Auxiliar.pintaPlayers(players);
 
-                                        playerOption = Auxiliar.pideElegirOpcionObjeto(players, "player", scanner);
+                                        playerOption = Auxiliar.pideElegirOpcionObjeto(players.size(), "player");
                                     }
 
                                     if (playerOption != -1) {
@@ -408,9 +384,7 @@ public class Main {
                                 String nameGame;
 
                                 // Preguntamos y leemos el nombre del juego
-                                System.out.println();
-                                System.out.println("¿Cuál es el nombre del juego?");
-                                nameGame = scanner.nextLine();
+                                nameGame = Auxiliar.leeString("¿Cuál es el nombre del juego?");
 
                                 try {
                                     int opcionJuego = 0;
@@ -423,7 +397,7 @@ public class Main {
                                         if (games.size() > 1) {
                                             Auxiliar.pintaGames(games);
 
-                                            opcionJuego = Auxiliar.pideElegirOpcionObjeto(games, "game", scanner);
+                                            opcionJuego = Auxiliar.pideElegirOpcionObjeto(games.size(), "game");
                                         }
 
                                         if (opcionJuego != -1) {
@@ -453,16 +427,17 @@ public class Main {
                                 double precioFin;
 
                                 // Preguntamos y leemos los precios
-                                System.out.println("Va a buscar una compra por franja de precio");
-                                System.out.println("¿Cuál es el precio inicial? (-1 para salir)");
-                                precioInicio = scanner.nextDouble();
+                                System.out.println();
+                                System.out.println();
+                                precioInicio = Auxiliar.leeDouble(
+                                    "Va a buscar una compra por franja de precio\n" +
+                                    "¿Cuál es el precio inicial? (-1 para salir)"
+                                );
 
-                                scanner.nextLine();
+                                
 
                                 if (precioInicio != -1) {
-                                    System.out.println();
-                                    System.out.println("¿Cuál es el precio final? (-1 para salir)");
-                                    precioFin = scanner.nextDouble();
+                                    precioFin = Auxiliar.leeDouble("¿Cuál es el precio final? (-1 para salir)");
 
                                     if (precioFin != -1) {
                                         // Buscamos todas las compras por ese precio
@@ -492,20 +467,20 @@ public class Main {
                                 System.out.println();
                                 System.out.println("Va a buscar una compra por su fecha (dd/MM/aaaa)");
                                 System.out.println("¿Cuál es el día? (-1 para salir)");
-                                dia = scanner.nextInt();
-                                scanner.nextLine();
+                                dia = Auxiliar.leeEntero("");
+                                
 
                                 if (dia != -1) {
                                     System.out.println();
                                     System.out.println("¿Cuál es el mes? (-1 para salir)");
-                                    mes = scanner.nextInt();
-                                    scanner.nextLine();
+                                    mes = Auxiliar.leeEntero("");
+                                    
 
                                     if (mes != -1) {
                                         System.out.println();
                                         System.out.println("¿Cuál es el año? (-1 para salir)");
-                                        anyo = scanner.nextInt();
-                                        scanner.nextLine();
+                                        anyo = Auxiliar.leeEntero("");
+                                        
 
                                         if (anyo != -1) {
                                             fecha = anyo + "-" + (mes < 10 ? "0" + mes : mes) + "-1" + (dia < 10 ? "0" + dia : dia);
@@ -573,18 +548,15 @@ public class Main {
                     System.out.println("Va a añadir un nuevo Player");
 
                     // Preguntamos y leemos los datos
-                    System.out.println("¿Cuál es su nombre? (-1 para salir)");
-                    nick = scanner.nextLine();
+                    nick = Auxiliar.leeString("¿Cuál es su nombre? (-1 para salir)");
 
                     if (!nick.equals("-1")) {
                         System.out.println();
-                        System.out.println("¿Cuál es su email? (-1 para salir)");
-                        email = scanner.nextLine();
+                        System.out.println();
+                        email = Auxiliar.leeString("¿Cuál es su email? (-1 para salir)");
 
                         if (!email.equals("-1")) {
-                            System.out.println();
-                            System.out.println("¿Cuál es su contraseña? (-1 para salir)");
-                            password = scanner.nextLine();
+                            password = Auxiliar.leeString("¿Cuál es su email? (-1 para salir)");
 
                             if (!password.equals("-1")) {
                                 Player player = new Player(nick, password, email);
@@ -617,23 +589,22 @@ public class Main {
                     System.out.println("Va a añadir un nuevo Game");
 
                     // Preguntamos y leemos los datos
-                    System.out.println("¿Cuál es su nombre? (-1 para salir)");
-                    nombre = scanner.nextLine();
+                    nombre = Auxiliar.leeString("¿Cuál es su nombre? (-1 para salir)");
 
                     if (!nombre.equals("-1")) {
                         // Pedimos las horas
-                        horas = Auxiliar.leeEntero("¿Cuáles son sus horas jugadas? (-1 para salir)", scanner);
+                        horas = Auxiliar.leeEntero("¿Cuáles son sus horas jugadas? (-1 para salir)");
 
                         if (horas != -1) {
                             do {
                                 // Pedimos los minutos
-                                minutos = Auxiliar.leeEntero("¿Cuales son sus minutos jugados? (-1 para salir)", scanner);
+                                minutos = Auxiliar.leeEntero("¿Cuales son sus minutos jugados? (-1 para salir)");
                             } while (minutos > 59);
 
                             if (minutos != -1) {
                                 do {
                                     // Pedimos los segundos
-                                    segundos = Auxiliar.leeEntero("¿Cuales son sus segundos jugados? (-1 para salir)", scanner);
+                                    segundos = Auxiliar.leeEntero("¿Cuales son sus segundos jugados? (-1 para salir)");
                                 } while (segundos > 59);
 
                                 if (segundos != -1) {
@@ -667,10 +638,7 @@ public class Main {
                     String nickPlayer;
 
                     // Preguntamos el nick del player y la leemos
-                    System.out.println();
-                    System.out.println("¿Cuál es el nick del player?");
-
-                    nickPlayer = scanner.nextLine();
+                    nickPlayer = Auxiliar.leeString("¿Cuál es el nick del player?");
 
                     List<Player> players = Auxiliar.getAllPlayersByNick(nickPlayer, instancia);
 
@@ -679,10 +647,7 @@ public class Main {
                             // Pintamos los players
                             Auxiliar.pintaPlayers(players);
 
-                            playerOption = Auxiliar.pideElegirOpcionObjeto(players, "player", scanner);
-
-                            // Limpiamos el Scanner
-                            scanner.nextLine();
+                            playerOption = Auxiliar.pideElegirOpcionObjeto(players.size(), "player");
                         }
 
                         if (playerOption != -1) {
@@ -692,17 +657,15 @@ public class Main {
                             String gameName;
                             int gameOption = 0;
 
-                            System.out.println();
-                            System.out.println("¿Cuál es el nombre del juego?");
-                            gameName = scanner.nextLine();
+                            gameName = Auxiliar.leeString("¿Cuál es el nombre del juego?");
 
-                            List<Game> games = Auxiliar.getAllGames(gameName, instancia);
+                            List<Game> games = Auxiliar.getAllGamesByName(gameName, instancia);
 
                             if (games != null && !games.isEmpty()) {
                                 if (games.size() > 1) {
                                     Auxiliar.pintaGames(games);
 
-                                    gameOption = Auxiliar.pideElegirOpcionObjeto(games, "game", scanner);
+                                    gameOption = Auxiliar.pideElegirOpcionObjeto(games.size(), "game");
                                 }
 
                                 if (gameOption >= 0) {
@@ -712,12 +675,8 @@ public class Main {
                                     double precio = 0;
 
                                     do {
-                                        System.out.println();
-                                        System.out.println("¿Cuál es el precio?");
-                                        precio = scanner.nextDouble();
+                                        precio = Auxiliar.leeDouble("¿Cuál es el precio?");
                                     } while (precio < 0);
-
-                                    scanner.nextLine();
 
                                     // Pedimos la fecha de la compra
                                     int dia;
@@ -726,19 +685,19 @@ public class Main {
 
                                     do {
                                         // Pedimos el año
-                                        anyo = Auxiliar.leeEntero("¿Cuál es el año de la compra? (-1 para salir)", scanner);
+                                        anyo = Auxiliar.leeEntero("¿Cuál es el año de la compra? (-1 para salir)");
                                     } while ((anyo > 0 && anyo < 1900) || anyo < -1);
 
                                     if (anyo > 0) {
                                         do {
                                             // Pedimos el mes
-                                            mes = Auxiliar.leeEntero("¿Cuál es el mes de la compra? (-1 para salir)", scanner);
+                                            mes = Auxiliar.leeEntero("¿Cuál es el mes de la compra? (-1 para salir)");
                                         } while (mes > 12 || mes < -1 || mes == 0);
 
                                         if (mes > 0) {
                                             do {
                                                 // Pedimos el día
-                                                dia = Auxiliar.leeEntero("¿Cuál es el dia de la compra? (-1 para salir)", scanner);
+                                                dia = Auxiliar.leeEntero("¿Cuál es el dia de la compra? (-1 para salir)");
                                             } while (dia > 31
                                                     || dia < -1
                                                     || dia == 0
@@ -815,8 +774,8 @@ public class Main {
                         System.out.println("4. Volver");
 
                         // Leemos la tabla elegida y limpiamos el scanner
-                        tabla = scanner.nextInt();
-                        scanner.nextLine();
+                        tabla = Auxiliar.leeEntero("");
+                        
 
                         switch (tabla) {
                             case 1 -> {
@@ -853,8 +812,7 @@ public class Main {
                 "1. ID\n" +
                 "2. Nick\n" +
                 "3. Email\n" +
-                "4. Volver",
-                scanner
+                "4. Volver"
             );
 
             switch (opcion) {
@@ -863,7 +821,7 @@ public class Main {
                     int id;
 
                     // Pedimos el ID
-                    id = Auxiliar.leeEntero("¿Cuál es el ID? (-1 para salir)", scanner);
+                    id = Auxiliar.leeEntero("¿Cuál es el ID? (-1 para salir)");
 
                     if (id > -1) {
                         try {
@@ -871,7 +829,7 @@ public class Main {
 
                             Auxiliar.muestraPlayerElegido(player);
 
-                            Auxiliar.confirmDelete(player, "Player", instancia, scanner);
+                            Auxiliar.confirmDelete(player, "Player", instancia);
                         } catch (Exception e) {
                             System.out.println("No se ha encontrado ningún player con ese ID");
                         }
@@ -883,9 +841,7 @@ public class Main {
                     // Por nick
                     String nick;
 
-                    System.out.println();
-                    System.out.println("¿Cuál es el nick (-1 para salir)");
-                    nick = scanner.nextLine();
+                    nick = Auxiliar.leeString("¿Cuál es el nick (-1 para salir)");
 
                     if (!nick.equals("-1")) {
                         int playerOption = 0;
@@ -898,7 +854,7 @@ public class Main {
 
                                 do {
                                     // Leemos la opción
-                                    playerOption = Auxiliar.leeEntero("Escribe el número de opción del player que deseas seleccionar (-1 para volver)", scanner);
+                                    playerOption = Auxiliar.leeEntero("Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
                                 } while (playerOption > players.size());
                             }
 
@@ -906,7 +862,7 @@ public class Main {
                                 player = players.get(playerOption);
                                 Auxiliar.muestraPlayerElegido(player);
 
-                                Auxiliar.confirmDelete(player, "Player", instancia, scanner);
+                                Auxiliar.confirmDelete(player, "Player", instancia);
                             } else {
                                 System.out.println("Volviendo...");
                             }
@@ -921,9 +877,7 @@ public class Main {
                     // Por email
                     String email;
 
-                    System.out.println();
-                    System.out.println("¿Cuál es el email (-1 para salir)");
-                    email = scanner.nextLine();
+                    email = Auxiliar.leeString("¿Cuál es el email (-1 para salir)");
 
                     if (!email.equals("-1")) {
                         int playerOption = 0;
@@ -934,14 +888,14 @@ public class Main {
                             if (players.size() > 1) {
                                 Auxiliar.pintaPlayers(players);
 
-                                playerOption = Auxiliar.pideElegirOpcionObjeto(players, "player", scanner);
+                                playerOption = Auxiliar.pideElegirOpcionObjeto(players.size(), "player");
                             }
 
                             if (playerOption != -1) {
                                 player = players.get(playerOption);
                                 Auxiliar.muestraPlayerElegido(player);
 
-                                Auxiliar.confirmDelete(player, "Player", instancia, scanner);
+                                Auxiliar.confirmDelete(player, "Player", instancia);
                             } else {
                                 System.out.println("Volviendo...");
                             }
@@ -969,8 +923,7 @@ public class Main {
                 "¿Por qué campo desea eliminar?\n" +
                 "1. ID\n" +
                 "2. Nombre\n" +
-                "3. Volver",
-                scanner
+                "3. Volver"
             );
 
             switch (opcion) {
@@ -979,7 +932,7 @@ public class Main {
                     int id;
 
                     // Leemos el ID
-                    id = Auxiliar.leeEntero("¿Cuál es el ID? (-1 para salir)", scanner);
+                    id = Auxiliar.leeEntero("¿Cuál es el ID? (-1 para salir)");
 
                     if (id > -1) {
                         try {
@@ -987,7 +940,7 @@ public class Main {
 
                             Auxiliar.muestraGameElegido(game);
 
-                            Auxiliar.confirmDelete(game, "Game", instancia, scanner);
+                            Auxiliar.confirmDelete(game, "Game", instancia);
                         } catch (Exception e) {
                             System.out.println("No se ha encontrado ningún game con ese ID");
                         }
@@ -999,27 +952,25 @@ public class Main {
                     // Por nombre
                     String name;
 
-                    System.out.println();
-                    System.out.println("¿Cuál es el nombre (-1 para salir)");
-                    name = scanner.nextLine();
+                    name = Auxiliar.leeString("¿Cuál es el nombre (-1 para salir)");
 
                     if (!name.equals("-1")) {
                         int gameOption = 0;
                         Game game;
-                        List<Game> games = Auxiliar.getAllGames(name, instancia);
+                        List<Game> games = Auxiliar.getAllGamesByName(name, instancia);
 
                         if (games != null && !games.isEmpty()) {
                             if (games.size() > 1) {
                                 Auxiliar.pintaGames(games);
 
-                                gameOption = Auxiliar.pideElegirOpcionObjeto(games, "game", scanner);
+                                gameOption = Auxiliar.pideElegirOpcionObjeto(games.size(), "game");
                             }
 
                             if (gameOption != -1) {
                                 game = games.get(gameOption);
                                 Auxiliar.muestraGameElegido(game);
 
-                                Auxiliar.confirmDelete(game, "Game", instancia, scanner);
+                                Auxiliar.confirmDelete(game, "Game", instancia);
                             } else {
                                 System.out.println("Volviendo...");
                             }
@@ -1045,15 +996,16 @@ public class Main {
                 "3. Game\n" +
                 "4. Precio\n" +
                 "5. Fecha de compra\n" +
-                "6. Volver",
-                scanner
+                "6. Volver"
             );
 
             switch (opcion) {
                 case 1 -> {
                     int id;
 
-                    id = Auxiliar.leeEntero("¿Cuál es el ID?", scanner);
+                    id = Auxiliar.leeEntero("¿Cuál es el ID?");
+
+
                 }
             }
         } while (opcion != 6);
