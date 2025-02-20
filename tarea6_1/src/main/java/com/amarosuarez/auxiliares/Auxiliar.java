@@ -158,6 +158,22 @@ public class Auxiliar {
     }
 
     /**
+     * Función que muestra la compra elegida a eliminar
+     * @param compra Compra elegida
+     */
+    public static void muestraCompraElegida(Compra compra, AccesoBD instancia) {
+        Player player = (Player) instancia.buscarPorId("getPlayerById", compra.getIdPlayer());
+
+        System.out.println();
+        System.out.println("La compra elegida es:");
+        System.out.println("ID -> " + compra.getIdCompra());
+        System.out.println("Player -> " + player.getNick());
+        System.out.println("Game -> " + compra.getCosa());
+        System.out.println("Precio -> " + compra.getPrecio());
+        System.out.println("Fecha de compra -> " + compra.getFechaCompra());
+    }
+
+    /**
      * Función que obtiene todos los players que coincidan con un nick
      * @param nick Nick del player a buscar
      * @param instancia Instancia a la base de datos
@@ -322,7 +338,6 @@ public class Auxiliar {
 
         return res;
     }
-
 
     /**
      * Función que muestra un mensaje, pide un String y lo devuelve
