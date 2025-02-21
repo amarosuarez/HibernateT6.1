@@ -298,6 +298,22 @@ public class Auxiliar {
     }
 
     /**
+     * Función que pide al usuario si está seguro de eliminar
+     * @return Respuesta del usuario (y o n)
+     */
+    public static String confirmaBorrado() {
+        String confirm = "";
+
+        do {
+            System.out.println();
+            System.out.println("¿Está seguro de que desea eliminarlo? (y/n)");
+            confirm = scanner.nextLine().toLowerCase();
+        } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
+
+        return confirm;
+    }
+
+    /**
      * Función que muestra una serie de opciones y pide que se elija uno
      *
      * @param listaSize Tamaño de la lista

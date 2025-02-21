@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,45 +15,45 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
- * Función que almacena los atributos y métodos,
- * además sirve para generar la tavla en la base de datos
+ * Función que almacena los atributos y métodos, además sirve para generar la
+ * tavla en la base de datos
  *
  * @author Amaro Suárez
  * @version 1.0
  */
 @NamedQueries({
     @NamedQuery(
-        name="getAllCompras",
-        query="from Compra"
+            name = "getAllCompras",
+            query = "from Compra"
     ),
     @NamedQuery(
-        name="getCompraById",
-        query="from Compra where idCompra = :id"
+            name = "getCompraById",
+            query = "from Compra where idCompra = :id"
     ),
     @NamedQuery(
-        name="getComprasByPlayer",
-        query="from Compra where idPlayer = :idPlayer"
+            name = "getComprasByPlayer",
+            query = "from Compra where idPlayer = :idPlayer"
     ),
     @NamedQuery(
-        name="getComprasByGame",
-        query="from Compra where idGame = :idGame"
+            name = "getComprasByGame",
+            query = "from Compra where idGame = :idGame"
     ),
     @NamedQuery(
-        name="getComprasByPrice",
-        query="from Compra where precio >= :precioInicio and precio <= :precioFin"
+            name = "getComprasByPrice",
+            query = "from Compra where precio >= :precioInicio and precio <= :precioFin"
     ),
     @NamedQuery(
-        name="getComprasByOnePrice",
-        query="from Compra where precio = :precio"
+            name = "getComprasByOnePrice",
+            query = "from Compra where precio = :precio"
     ),
     @NamedQuery(
-        name="getComprasByDate",
-        query="from Compra where fechaCompra = :fechaCompra"
-    ),
-})
+            name = "getComprasByDate",
+            query = "from Compra where fechaCompra = :fechaCompra"
+    ),})
 @Entity
 @Table(name = "Compras")
 public class Compra implements Serializable {
+
     /**
      * Atributo que almacena el id de la compra
      */
@@ -92,15 +93,16 @@ public class Compra implements Serializable {
     private String fechaCompra;
 
     @ManyToOne
-    @JoinColumn(name = "idPlayer", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "idPlayer", foreignKey = @ForeignKey(name = "FKdwn9j7a8ofu9cfg5cjigqj56v"), nullable = false, insertable = false, updatable = false)
     private Player player;
 
     @ManyToOne
-    @JoinColumn(name = "idGame", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "idGame", foreignKey = @ForeignKey(name = "FK15ce9qcyq9qulmdc60fropjkw"), nullable = false, insertable = false, updatable = false)
     private Game game;
 
     /**
      * Constructor con todos los parámetros
+     *
      * @param idPlayer Id del jugador
      * @param idGame Id del juego
      * @param cosa Nombre del juego
@@ -132,10 +134,12 @@ public class Compra implements Serializable {
     /**
      * Constructor sin parámetros
      */
-    public Compra() {}
+    public Compra() {
+    }
 
     /**
      * Función que devuelve el id de la compra
+     *
      * @return ID de la compra
      */
     public int getIdCompra() {
@@ -144,6 +148,7 @@ public class Compra implements Serializable {
 
     /**
      * Función que devuelve el id del jugador
+     *
      * @return ID del jugador
      */
     public int getIdPlayer() {
@@ -152,6 +157,7 @@ public class Compra implements Serializable {
 
     /**
      * Función que devuelve el id del juego
+     *
      * @return ID del juego
      */
     public int getIdGame() {
@@ -160,6 +166,7 @@ public class Compra implements Serializable {
 
     /**
      * Función que devuelve el nombre del juego
+     *
      * @return Nombre del juego
      */
     public String getCosa() {
@@ -168,14 +175,16 @@ public class Compra implements Serializable {
 
     /**
      * Función que devuelve el precio de la compra
+     *
      * @return Precio de la compra
      */
     public double getPrecio() {
         return this.precio;
     }
-    
+
     /**
      * Función que devuelve la fecha de la compra
+     *
      * @return Fecha de la compra
      */
     public String getFechaCompra() {
@@ -184,6 +193,7 @@ public class Compra implements Serializable {
 
     /**
      * Función que coloca el id del jugador
+     *
      * @param idPlayer Id del jugador
      */
     public void setIdPlayer(int idPlayer) {
@@ -194,6 +204,7 @@ public class Compra implements Serializable {
 
     /**
      * Función que coloca el id de la compra
+     *
      * @param idGame ID de la compra
      */
     public void setIdGame(int idGame) {
@@ -204,29 +215,34 @@ public class Compra implements Serializable {
 
     /**
      * Función que coloca el nombre del juego
+     *
      * @param cosa Nombre del juego
      */
     public void setCosa(String cosa) {
-        if (cosa != null && !cosa.isEmpty())
+        if (cosa != null && !cosa.isEmpty()) {
             this.cosa = cosa;
+        }
     }
 
     /**
      * Función que coloca el precio de la compra
+     *
      * @param precio Precio de la compra
      */
     public void setPrecio(double precio) {
-        if (precio >= 0)
+        if (precio >= 0) {
             this.precio = precio;
+        }
     }
 
     /**
      * Función que coloca la fecha de la compra
+     *
      * @param fechaCompra Fecha de la compra
      */
     public void setFechaCompra(String fechaCompra) {
-        if (fechaCompra != null)
+        if (fechaCompra != null) {
             this.fechaCompra = fechaCompra;
+        }
     }
 }
-

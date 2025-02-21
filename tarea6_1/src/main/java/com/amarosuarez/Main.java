@@ -59,7 +59,7 @@ public class Main {
 
                         // Ejecutamos la opción seleccioanda
                         mostrarEliminarOpcion(opcionEliminar);
-                    } while (opcionEliminar != 4);
+                    } while (opcionEliminar != 5);
                     System.out.println("Volviendo...");
                 }
                 case 5 ->
@@ -204,15 +204,13 @@ public class Main {
                         List<Game> listaGames = instancia.listar("getAllGames");
 
                         if (!listaGames.isEmpty()) {
-                            if (listaGames.size() > 1) {
                                 // Pintamos los games
                                 Auxiliar.listaGames(listaGames);
-                            }
                         } else {
-                            System.out.println("No se ha encontrado ningún player");
+                            System.out.println("No se ha encontrado ningún game");
                         }
                     } catch (Exception e) {
-                        System.out.println("No se ha encontrado ningún player");
+                        System.out.println("No se ha encontrado ningún game");
                     }
                 }
                 case 4 -> {
@@ -703,9 +701,10 @@ public class Main {
         String menu = "";
         menu += "¿Qué desea eliminar?\n";
         menu += "1. Un registro\n";
-        menu += "2. Una tabla\n";
-        menu += "3. Todas las tablas\n";
-        menu += "4. Volver al menú principal";
+        menu += "2. Todos los registros de una tabla\n";
+        menu += "3. Una tabla\n";
+        menu += "4. Todas las tablas\n";
+        menu += "5. Volver al menú principal";
         return menu;
     }
 
@@ -745,6 +744,60 @@ public class Main {
                             }
                         }
                     } while (tabla != 4);
+                }
+                case 2 -> {
+                    int tablaElegida = 0;
+                    String confirm = "";
+
+                    do {
+                        // Leemos la tabla elegida
+                        tablaElegida = Auxiliar.leeEntero(
+                                "¿De qué tabla deseas eliminar los registros?\n"
+                                + "1. Player\n"
+                                + "2. Game\n"
+                                + "3. Compra\n"
+                                + "4. Volver"
+                        );
+
+                        if (tablaElegida != 4) {
+                            confirm = Auxiliar.confirmaBorrado();
+
+                            if (confirm.equals("y")) {
+                                switch (tablaElegida) {
+                                    case 1 -> {
+                                        try {
+                                            instancia.borrarTodosLosRegistros("Player");
+                                            System.out.println("Players borrados");
+                                        } catch (Exception e) {
+                                            System.out.println("Ha ocurrido un error");
+                                        }
+                                    }
+                                    case 2 -> {
+                                        try {
+                                            instancia.borrarTodosLosRegistros("Game");
+                                            System.out.println("Games borrados");
+                                        } catch (Exception e) {
+                                            System.out.println("Ha ocurrido un error");
+                                        }
+                                    }
+                                    case 3 -> {
+                                        try {
+                                            instancia.borrarTodosLosRegistros("Compra");
+                                            System.out.println("Compras borradas");
+                                        } catch (Exception e) {
+                                            System.out.println("Ha ocurrido un error");
+                                        }
+                                    }
+                                }
+                            } else {
+                                System.out.println("Operación cancelada");
+                            }
+                        } else {
+                            System.out.println("Volviendo...");
+                        }
+
+                    } while (tablaElegida != 4);
+
                 }
             }
         } catch (Exception e) {

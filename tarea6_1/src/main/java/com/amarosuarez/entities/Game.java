@@ -61,7 +61,7 @@ public class Game implements Serializable {
     /**
      * Atributo que almacena las compras en las que aparece el juego
      */
-    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Compra> compras;
 
     /**
