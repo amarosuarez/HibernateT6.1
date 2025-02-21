@@ -154,6 +154,18 @@ public class AccesoBD {
     }
 
     /**
+     * Función que devuelve una lista de compras filtradas por precio
+     * @param precio Precio de la compra
+     * @return Lista de compras
+     */
+    public List<Compra> listarPorPrecioUnico(double precio) {
+        TypedQuery query = session.getNamedQuery("getComprasByOnePrice")
+                .setParameter("precio", precio);
+
+        return query.getResultList();
+    }
+
+    /**
      * Función que devuelve un objeto buscado por id
      *
      * @param namedQuery Nombre de la query

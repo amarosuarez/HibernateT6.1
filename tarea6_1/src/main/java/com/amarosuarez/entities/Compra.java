@@ -42,6 +42,10 @@ import javax.persistence.Table;
         query="from Compra where precio >= :precioInicio and precio <= :precioFin"
     ),
     @NamedQuery(
+        name="getComprasByOnePrice",
+        query="from Compra where precio = :precio"
+    ),
+    @NamedQuery(
         name="getComprasByDate",
         query="from Compra where fechaCompra = :fechaCompra"
     ),

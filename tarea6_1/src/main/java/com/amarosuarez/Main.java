@@ -1,6 +1,5 @@
 package com.amarosuarez;
 
-import java.time.Year;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -132,11 +131,11 @@ public class Main {
 
                         // Leemos la opción
                         opcionBuscarPlayer = Auxiliar.leeEntero(
-                                "¿Por qué campo deseas buscar al Player?\n" +
-                                        "1. ID\n" +
-                                        "2. Nick\n" +
-                                        "3. Email\n" +
-                                        "4. Volver");
+                                "¿Por qué campo deseas buscar al Player?\n"
+                                + "1. ID\n"
+                                + "2. Nick\n"
+                                + "3. Email\n"
+                                + "4. Volver");
 
                         switch (opcionBuscarPlayer) {
                             case 1 -> {
@@ -223,10 +222,10 @@ public class Main {
                     do {
                         // Obtenemos la opción
                         opcionGame = Auxiliar.leeEntero(
-                                "¿Por qué campo desea buscar el Game?\n" +
-                                        "1. ID\n" +
-                                        "2. Nombre\n" +
-                                        "3. Volver");
+                                "¿Por qué campo desea buscar el Game?\n"
+                                + "1. ID\n"
+                                + "2. Nombre\n"
+                                + "3. Volver");
 
                         switch (opcionGame) {
                             case 1:
@@ -250,8 +249,6 @@ public class Main {
                                 String nombreJuego;
 
                                 // Preguntamos y leemos el nombre del juego
-                                System.out.println();
-                                System.out.println("¿Cuál es el nombre del Game?");
                                 nombreJuego = Auxiliar.leeString("¿Cuál es el nombre del Game?");
 
                                 try {
@@ -299,13 +296,13 @@ public class Main {
                     do {
                         // Leemos la opción
                         opcionCompra = Auxiliar.leeEntero(
-                                "¿Por qué campo deseas buscar la compra?\n" +
-                                        "1. ID\n" +
-                                        "2. Player\n" +
-                                        "3. Game\n" +
-                                        "4. Precio\n" +
-                                        "5. Fecha de compra\n" +
-                                        "6. Volver");
+                                "¿Por qué campo deseas buscar la compra?\n"
+                                + "1. ID\n"
+                                + "2. Player\n"
+                                + "3. Game\n"
+                                + "4. Precio\n"
+                                + "5. Fecha de compra\n"
+                                + "6. Volver");
 
                         switch (opcionCompra) {
                             case 1:
@@ -419,11 +416,9 @@ public class Main {
                                 double precioFin;
 
                                 // Preguntamos y leemos los precios
-                                System.out.println();
-                                System.out.println();
                                 precioInicio = Auxiliar.leeDouble(
-                                        "Va a buscar una compra por franja de precio\n" +
-                                                "¿Cuál es el precio inicial? (-1 para salir)");
+                                        "Va a buscar una compra por franja de precio\n"
+                                        + "¿Cuál es el precio inicial? (-1 para salir)");
 
                                 if (precioInicio != -1) {
                                     precioFin = Auxiliar.leeDouble("¿Cuál es el precio final? (-1 para salir)");
@@ -454,23 +449,19 @@ public class Main {
                                 int anyo;
 
                                 // Preguntamos y leemos los datos
-                                System.out.println();
-                                System.out.println("Va a buscar una compra por su fecha (dd/MM/aaaa)");
-                                System.out.println("¿Cuál es el día? (-1 para salir)");
-                                dia = Auxiliar.leeEntero("");
+                                dia = Auxiliar.leeEntero(
+                                        "Va a buscar una compra por su fecha (dd/MM/aaaa)\n"
+                                        + "¿Cuál es el día? (-1 para salir)"
+                                );
 
                                 if (dia != -1) {
-                                    System.out.println();
-                                    System.out.println("¿Cuál es el mes? (-1 para salir)");
-                                    mes = Auxiliar.leeEntero("");
+                                    mes = Auxiliar.leeEntero("¿Cuál es el mes? (-1 para salir)");
 
                                     if (mes != -1) {
-                                        System.out.println();
-                                        System.out.println("¿Cuál es el año? (-1 para salir)");
-                                        anyo = Auxiliar.leeEntero("");
+                                        anyo = Auxiliar.leeEntero("¿Cuál es el año? (-1 para salir)");
 
                                         if (anyo != -1) {
-                                            fecha = anyo + "-" + (mes < 10 ? "0" + mes : mes) + "-1"
+                                            fecha = anyo + "-" + (mes < 10 ? "0" + mes : mes) + "-"
                                                     + (dia < 10 ? "0" + dia : dia);
 
                                             // Buscamos las compras
@@ -672,46 +663,13 @@ public class Main {
                                     } while (precio < 0);
 
                                     // Pedimos la fecha de la compra
-                                    int dia;
-                                    int mes;
-                                    int anyo;
+                                    String fecha = Auxiliar.pideFecha();
 
-                                    do {
-                                        // Pedimos el año
-                                        anyo = Auxiliar.leeEntero("Ingrese el año de la compra (-1 para salir)");
-                                    } while ((anyo > 0 && anyo < 1900) || anyo < -1);
-
-                                    if (anyo > 0) {
-                                        do {
-                                            // Pedimos el mes
-                                            mes = Auxiliar.leeEntero("Ingrese el mes de la compra (-1 para salir)");
-                                        } while (mes > 12 || mes < -1 || mes == 0);
-
-                                        if (mes > 0) {
-                                            do {
-                                                // Pedimos el día
-                                                dia = Auxiliar.leeEntero("Ingrese el día de la compra (-1 para salir)");
-                                            } while (dia > 31
-                                                    || dia < -1
-                                                    || dia == 0
-                                                    || ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30)
-                                                    || (Year.isLeap(anyo) && mes == 2 && dia > 29)
-                                                    || (!Year.isLeap(anyo) && mes == 2 && dia > 28));
-
-                                            if (dia > 0) {
-                                                String fecha = anyo + "-" + (mes > 9 ? mes : "0" + mes) + "-"
-                                                        + (dia > 9 ? dia : "0" + dia);
-
-                                                Compra compra = new Compra(player.getIdPlayer(), game.getIdGame(),
-                                                        game.getNombre(), precio, fecha);
-                                                instancia.guardar(compra);
-                                                System.out.println("Compra guardada con éxito");
-                                            } else {
-                                                System.out.println("Volviendo...");
-                                            }
-                                        } else {
-                                            System.out.println("Volviendo...");
-                                        }
+                                    if (!fecha.equals("-1")) {
+                                        Compra compra = new Compra(player.getIdPlayer(), game.getIdGame(),
+                                                game.getNombre(), precio, fecha);
+                                        instancia.guardar(compra);
+                                        System.out.println("Compra guardada con éxito");
                                     } else {
                                         System.out.println("Volviendo...");
                                     }
@@ -803,11 +761,11 @@ public class Main {
         do {
             // Leemos la opción
             opcion = Auxiliar.leeEntero(
-                    "¿Por qué campo desea eliminar?\n" +
-                            "1. ID\n" +
-                            "2. Nick\n" +
-                            "3. Email\n" +
-                            "4. Volver");
+                    "¿Por qué campo desea eliminar?\n"
+                    + "1. ID\n"
+                    + "2. Nick\n"
+                    + "3. Email\n"
+                    + "4. Volver");
 
             switch (opcion) {
                 case 1 -> {
@@ -915,10 +873,10 @@ public class Main {
         do {
             // Leemos la opción
             opcion = Auxiliar.leeEntero(
-                    "¿Por qué campo desea eliminar?\n" +
-                            "1. ID\n" +
-                            "2. Nombre\n" +
-                            "3. Volver");
+                    "¿Por qué campo desea eliminar?\n"
+                    + "1. ID\n"
+                    + "2. Nombre\n"
+                    + "3. Volver");
 
             switch (opcion) {
                 case 1 -> {
@@ -984,16 +942,17 @@ public class Main {
         do {
             // Leemos la opción
             opcion = Auxiliar.leeEntero(
-                    "¿Por qué campo desea eliminar?\n" +
-                            "1. ID\n" +
-                            "2. Player\n" +
-                            "3. Game\n" +
-                            "4. Precio\n" +
-                            "5. Fecha de compra\n" +
-                            "6. Volver");
+                    "¿Por qué campo desea eliminar?\n"
+                    + "1. ID\n"
+                    + "2. Player\n"
+                    + "3. Game\n"
+                    + "4. Precio\n"
+                    + "5. Fecha de compra\n"
+                    + "6. Volver");
 
             switch (opcion) {
                 case 1 -> {
+                    // Elimina por ID
                     int id;
 
                     id = Auxiliar.leeEntero("¿Cuál es el ID? (-1 para salir)");
@@ -1001,7 +960,7 @@ public class Main {
                     if (id != -1) {
                         try {
                             Compra compra = (Compra) instancia.buscarPorId("getCompraById", id);
-    
+
                             Auxiliar.muestraCompraElegida(compra, instancia);
                         } catch (Exception e) {
                             System.out.println("No se ha encontrado ninguna compra con ese ID");
@@ -1009,6 +968,174 @@ public class Main {
                     } else {
                         System.out.println("Volviendo...");
                     }
+                }
+                case 2 -> {
+                    // Elimina por Player
+                    String nick = "";
+                    int playerOption = 0;
+
+                    nick = Auxiliar.leeString("¿Cuál es el nick del player?");
+
+                    List<Player> players = Auxiliar.getAllPlayersByNick(nick, instancia);
+
+                    if (players != null && !players.isEmpty()) {
+                        if (players.size() > 1) {
+                            // Pintamos los players
+                            Auxiliar.pintaPlayers(players);
+
+                            playerOption = Auxiliar.pideElegirOpcionObjeto(players.size(), "player");
+                        } else {
+                            Auxiliar.muestraPlayerElegido(players.get(playerOption));
+                        }
+
+                        if (playerOption != -1) {
+                            // Obtenemos el player seleccionado
+                            Player player = players.get(playerOption);
+
+                            // Buscamos las compras
+                            List<Compra> compras = instancia.listarConParametros(
+                                    "getComprasByPlayer",
+                                    "idPlayer",
+                                    player.getIdPlayer());
+
+                            if (!compras.isEmpty()) {
+                                // Pintamos las compras
+                                int compraOpcion = 0;
+
+                                if (compras.size() > 1) {
+                                    Auxiliar.pintaCompras(compras, instancia);
+
+                                    compraOpcion = Auxiliar.pideElegirOpcionObjeto(compras.size(), "Compra");
+                                } else {
+                                    Auxiliar.muestraCompraElegida(compras.get(compraOpcion), instancia);
+                                }
+
+                                if (compraOpcion != -1) {
+                                    Auxiliar.confirmDelete(compras.get(compraOpcion), "compra", instancia);
+                                } else {
+                                    System.out.println("Volviendo...");
+                                }
+                            } else {
+                                System.out.println("No se ha encontrado ninguna compra para ese player");
+                            }
+                        } else {
+                            System.out.println("Volviendo...");
+                        }
+                    } else {
+                        System.out.println("No se ha encontrado ningún player con ese nick");
+                    }
+                }
+                case 3 -> {
+                    // Por Game
+                    String nombreGame = "";
+                    int gameOpcion = 0;
+
+                    nombreGame = Auxiliar.leeString("¿Cuál es el nombre del Game?");
+
+                    List<Game> games = instancia.buscarPorParametro("getGamesByName", "nombre", "%" + nombreGame + "%");
+
+                    if (!games.isEmpty()) {
+                        if (games.size() > 1) {
+                            Auxiliar.pintaGames(games);
+                            gameOpcion = Auxiliar.pideElegirOpcionObjeto(games.size(), nombreGame);
+                        } else {
+                            Auxiliar.muestraGameElegido(games.get(gameOpcion));
+                            System.out.println();
+                        }
+
+                        if (gameOpcion != -1) {
+                            int compraOpcion = 0;
+
+                            // Obtenemos el Game
+                            Game game = games.get(gameOpcion);
+
+                            // Obtenemos las compras con ese Game
+                            List<Compra> compras = instancia.listarConParametros("getComprasByGame", "idGame", game.getIdGame());
+
+                            if (!compras.isEmpty()) {
+                                if (compras.size() > 1) {
+                                    Auxiliar.pintaCompras(compras, instancia);
+                                    compraOpcion = Auxiliar.pideElegirOpcionObjeto(compras.size(), "compra");
+                                } else {
+                                    Auxiliar.muestraCompraElegida(compras.get(compraOpcion), instancia);
+                                }
+
+                                if (compraOpcion != -1) {
+                                    Auxiliar.confirmDelete(compras.get(compraOpcion), "compra", instancia);
+                                } else {
+                                    System.out.println("Volviendo...");
+                                }
+                            } else {
+                                System.out.println("No se ha encontrado ninguna compra con ese Game");
+                            }
+                        } else {
+                            System.out.println("Volviendo...");
+                        }
+                    } else {
+                        System.out.println("No se ha encontrado ningún Game con ese nombre");
+                    }
+                }
+                case 4 -> {
+                    // Por precio
+                    double precio = 0;
+                    int compraOpcion = 0;
+
+                    precio = Auxiliar.leeDouble("¿Cuál es el precio de la compra?");
+
+                    // Buscamos las compras
+                    List<Compra> compras = instancia.listarPorPrecioUnico(precio);
+
+                    if (!compras.isEmpty()) {
+                        if (compras.size() > 1) {
+                            Auxiliar.pintaCompras(compras, instancia);
+                            compraOpcion = Auxiliar.pideElegirOpcionObjeto(compras.size(), "Compra");
+                        } else {
+                            Auxiliar.muestraCompraElegida(compras.get(compraOpcion), instancia);
+                        }
+
+                        if (compraOpcion != -1) {
+                            Auxiliar.confirmDelete(compras.get(compraOpcion), "compra", instancia);
+                        } else {
+                            System.out.println("Volviendo...");
+                        }
+                    } else {
+                        System.out.println("No se ha encontrado ninguna compra con ese precio");
+                    }
+                }
+                case 5 -> {
+
+                    // Por fecha
+                    String fecha = "";
+                    int compraOpcion = 0;
+
+                    // Pedimos la fecha
+                    fecha = Auxiliar.pideFecha();
+
+                    if (!fecha.equals("-1")) {
+                        List<Compra> compras = instancia.buscarPorParametro("getComprasByDate", "fechaCompra", fecha);
+
+                        if (!compras.isEmpty()) {
+                            if (compras.size() > 1) {
+                                Auxiliar.pintaCompras(compras, instancia);
+                                compraOpcion = Auxiliar.pideElegirOpcionObjeto(compras.size(), "compra");
+                            } else {
+                                Auxiliar.muestraCompraElegida(compras.get(compraOpcion), instancia);
+                            }
+
+                            if (compraOpcion != -1) {
+                                Auxiliar.confirmDelete(compras.get(compraOpcion), "Compra", instancia);
+                            } else {
+                                System.out.println("Volviendo...");
+                            }
+                        } else {
+                            System.out.println("No se ha encontrado ninguna compra con esa fecha");
+                        }
+                    } else {
+                        System.out.println("Volviendo...");
+                    }
+                }
+                case 6 -> {
+                    System.out.println("Volviendo...");
                 }
             }
         } while (opcion != 6);
