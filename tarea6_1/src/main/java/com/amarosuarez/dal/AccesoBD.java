@@ -98,7 +98,7 @@ public class AccesoBD {
 
     /**
      * Función que elimina todos los registros de una tabla
-     * 
+     *
      * @param nombreEntidad Nombre de la entidad
      */
     public void borrarTodosLosRegistros(String nombreEntidad) {
