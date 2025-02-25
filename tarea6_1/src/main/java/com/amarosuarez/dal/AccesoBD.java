@@ -98,12 +98,36 @@ public class AccesoBD {
 
     /**
      * Función que elimina todos los registros de una tabla
+     * 
      * @param nombreEntidad Nombre de la entidad
      */
     public void borrarTodosLosRegistros(String nombreEntidad) {
-        String hql = "DELETE FROM " + nombreEntidad;
-        session.createQuery(hql).executeUpdate();
-        session.flush();
+        try {
+            String hql = "DELETE FROM " + nombreEntidad;
+            session.createQuery(hql).executeUpdate();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close(); // Cerrar la sesión
+            }
+        }
+    }
+
+    /**
+     * Función que recibe un booleano y hace commit o rollback
+     * @param commit Booleano que indica si se hace commit o rollback
+     */
+    public void commitTransaction(boolean commit) {
+        if (commit) {
+            transaction.commit();
+        } else {
+            transaction.rollback();
+        }
     }
 
     /**
@@ -122,8 +146,8 @@ public class AccesoBD {
      * Función que devuelve una lista buscada por un parámetro determinado
      *
      * @param namedQuery Nombre de la query
-     * @param parametro Nombre del parámetro
-     * @param valor Valor del parámetro
+     * @param parametro  Nombre del parámetro
+     * @param valor      Valor del parámetro
      * @return Lista
      */
     public List listarConParametros(String namedQuery, String parametro, String valor) {
@@ -137,8 +161,8 @@ public class AccesoBD {
      * valor es int
      *
      * @param namedQuery Nombre de la query
-     * @param parametro Nombre del parámetro
-     * @param valor Valor del parámetro (int)
+     * @param parametro  Nombre del parámetro
+     * @param valor      Valor del parámetro (int)
      * @return Lista
      */
     public List listarConParametros(String namedQuery, String parametro, int valor) {
@@ -165,6 +189,7 @@ public class AccesoBD {
 
     /**
      * Función que devuelve una lista de compras filtradas por precio
+     * 
      * @param precio Precio de la compra
      * @return Lista de compras
      */
@@ -179,7 +204,7 @@ public class AccesoBD {
      * Función que devuelve un objeto buscado por id
      *
      * @param namedQuery Nombre de la query
-     * @param id Id a buscar
+     * @param id         Id a buscar
      * @return Objeto
      */
     public Object buscarPorId(String namedQuery, int id) {
@@ -192,8 +217,8 @@ public class AccesoBD {
      * Función que busca por parámetro especificado
      *
      * @param namedQuery Nombre de la query
-     * @param parametro Nombre del parámetro
-     * @param valor Valor del parámetro (String)
+     * @param parametro  Nombre del parámetro
+     * @param valor      Valor del parámetro (String)
      * @return Lista de los objetos encontrados
      */
     public List buscarPorParametro(String namedQuery, String parametro, String valor) {

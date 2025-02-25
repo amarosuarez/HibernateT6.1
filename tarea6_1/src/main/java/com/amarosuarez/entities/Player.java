@@ -71,7 +71,7 @@ public class Player implements Serializable {
     /**
      * Atributo que almacena la lista de compras del player
      */
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Compra> compras;
 
     /**

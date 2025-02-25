@@ -93,11 +93,11 @@ public class Compra implements Serializable {
     private String fechaCompra;
 
     @ManyToOne
-    @JoinColumn(name = "idPlayer", foreignKey = @ForeignKey(name = "FKdwn9j7a8ofu9cfg5cjigqj56v"), nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "idPlayer", foreignKey = @ForeignKey(name = "FKdwn9j7a8ofu9cfg5cjigqj56v", foreignKeyDefinition = "FOREIGN KEY (idPlayer) REFERENCES Players(idPlayer) ON DELETE CASCADE"), nullable = false, insertable = false, updatable = false)
     private Player player;
 
     @ManyToOne
-    @JoinColumn(name = "idGame", foreignKey = @ForeignKey(name = "FK15ce9qcyq9qulmdc60fropjkw"), nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "idGame", foreignKey = @ForeignKey(name = "FK15ce9qcyq9qulmdc60fropjkw", foreignKeyDefinition = "FOREIGN KEY (idGame) REFERENCES Games(idGame) ON DELETE CASCADE"), nullable = false, insertable = false, updatable = false)
     private Game game;
 
     /**
