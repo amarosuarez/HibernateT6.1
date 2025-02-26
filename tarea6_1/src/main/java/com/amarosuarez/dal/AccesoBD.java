@@ -90,6 +90,85 @@ public class AccesoBD {
     }
 
     /**
+     * Función que crea la tabla players
+     */
+    public void crearTablaPlayers() {
+        try {
+            String sql = "CREATE TABLE Players("
+                    + "idPlayer int Primary Key auto_increment,"
+                    + "nick varchar(45),"
+                    + "password varchar(128),"
+                    + "email varchar(100));";
+
+            // Ejecutar la sentencia SQL nativa
+            session.createNativeQuery(sql).executeUpdate();
+        } catch (Exception e) {
+            // Revertir la transacción en caso de error
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Función que crea la tabla games
+     */
+    public void crearTablaGames() {
+        try {
+            String sql = "CREATE TABLE Games("
+                    + "idGame int Primary Key auto_increment,"
+                    + "nombre varchar(45),"
+                    + "tiempoJugado varchar(50));";
+
+            // Ejecutar la sentencia SQL nativa
+            session.createNativeQuery(sql).executeUpdate();
+        } catch (Exception e) {
+            // Revertir la transacción en caso de error
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Función que crea la tabla compras
+     */
+    public void crearTablaCompras() {
+        try {
+            String sql = "CREATE TABLE Compras("
+                    + "idCompra int Primary Key auto_increment,"
+                    + "idPlayer int,"
+                    + "idGame int,"
+                    + "cosa Varchar(25),"
+                    + "precio decimal(6,2),"
+                    + "fechaCompra DATE,"
+                    + "FOREIGN KEY (idPlayer) REFERENCES Players(idPlayer), "
+                    + "FOREIGN KEY (idGame) REFERENCES Games(idGame)"
+                    + ");";
+
+            // Ejecutar la sentencia SQL nativa
+            session.createNativeQuery(sql).executeUpdate();
+        } catch (Exception e) {
+            // Revertir la transacción en caso de error
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Función que crea todas las tablas
+     */
+    public void crearTablas() {
+        crearTablaPlayers();
+        crearTablaGames();
+        crearTablaCompras();
+    }
+
+    /**
      * Función que guarda un objeto
      *
      * @param cosa Objeto a guardar
@@ -116,7 +195,7 @@ public class AccesoBD {
             if (session.isOpen()) {
                 // Iniciar una transacción
                 transaction = session.beginTransaction();
-                
+
                 // Comprobamos de que clase es el objeto
                 if (cosa instanceof Player player) {
                     nombreEntidad = "Player";
@@ -164,6 +243,20 @@ public class AccesoBD {
             }
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Función que recibe el nombre de una entidad y borra la tabla de la base
+     * de datos
+     *
+     * @param nombreEntidad Nombre de la entidad
+     */
+    public void borraTabla(String nombreEntidad) {
+        // Crear la consulta SQL nativa para borrar la tabla
+        String sql = "DROP TABLE IF EXISTS " + nombreEntidad;
+
+        // Ejecutar la consulta SQL nativa
+        session.createNativeQuery(sql).executeUpdate();
     }
 
     /**

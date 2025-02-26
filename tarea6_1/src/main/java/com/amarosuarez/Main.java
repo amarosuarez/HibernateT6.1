@@ -743,6 +743,7 @@ public class Main {
                     } while (tabla != 4);
                 }
                 case 2 -> {
+                    // Eliminar todos los registros de una tabla
                     int tablaElegida = 0;
 
                     do {
@@ -786,7 +787,52 @@ public class Main {
                         }
 
                     } while (tablaElegida != 4);
+                }
+                case 3 -> {
+                    // Eliminar una tabla
+                    int tablaElegida = 0;
 
+                    do {
+                        // Leemos la tabla elegida
+                        tablaElegida = Auxiliar.leeEntero(
+                                "¿De qué tabla deseas eliminar los registros?\n"
+                                + "1. Player\n"
+                                + "2. Game\n"
+                                + "3. Compra\n"
+                                + "4. Volver");
+
+                        if (tablaElegida != 4) {
+                            switch (tablaElegida) {
+                                case 1 -> {
+                                    try {
+                                        Auxiliar.confirmDeleteAll("Player", instancia);
+                                    } catch (Exception e) {
+                                        System.out.println("Ha ocurrido un error");
+                                    }
+                                }
+                                case 2 -> {
+                                    try {
+                                        Auxiliar.confirmDeleteAll("Game", instancia);
+                                    } catch (Exception e) {
+                                        System.out.println("Ha ocurrido un error");
+                                    }
+                                }
+                                case 3 -> {
+                                    try {
+                                        Auxiliar.confirmDeleteAll("Compra", instancia);
+                                    } catch (Exception e) {
+                                        System.out.println("Ha ocurrido un error");
+                                    }
+                                }
+                                case 4 -> {
+                                    System.out.println("Volviendo...");
+                                }
+                            }
+                        } else {
+                            System.out.println("Volviendo...");
+                        }
+
+                    } while (tablaElegida != 4);
                 }
             }
         } catch (Exception e) {
