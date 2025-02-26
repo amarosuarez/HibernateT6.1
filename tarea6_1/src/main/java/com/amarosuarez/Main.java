@@ -744,7 +744,6 @@ public class Main {
                 }
                 case 2 -> {
                     int tablaElegida = 0;
-                    String confirm = "";
 
                     do {
                         // Leemos la tabla elegida
@@ -756,43 +755,31 @@ public class Main {
                                 + "4. Volver");
 
                         if (tablaElegida != 4) {
-                            confirm = Auxiliar.confirmaBorrado();
-
-                            if (confirm.equals("y")) {
-                                switch (tablaElegida) {
-                                    case 1 -> {
-                                        try {
-                                            instancia.borrarTodosLosRegistros("Player");
-                                            System.out.println("Players borrados");
-
-                                        } catch (Exception e) {
-                                            System.out.println("Ha ocurrido un error");
-                                        }
-                                    }
-                                    case 2 -> {
-                                        try {
-                                            instancia.borrarTodosLosRegistros("Game");
-                                            System.out.println("Games borrados");
-
-                                        } catch (Exception e) {
-                                            System.out.println("Ha ocurrido un error");
-                                        }
-                                    }
-                                    case 3 -> {
-                                        try {
-                                            instancia.borrarTodosLosRegistros("Compra");
-                                            System.out.println("Compras borradas");
-
-                                        } catch (Exception e) {
-                                            System.out.println("Ha ocurrido un error");
-                                        }
-                                    }
-                                    case 4 -> {
-                                        System.out.println("Volviendo...");
+                            switch (tablaElegida) {
+                                case 1 -> {
+                                    try {
+                                        Auxiliar.confirmDeleteAll("Player", instancia);
+                                    } catch (Exception e) {
+                                        System.out.println("Ha ocurrido un error");
                                     }
                                 }
-                            } else {
-                                System.out.println("Operación cancelada");
+                                case 2 -> {
+                                    try {
+                                        Auxiliar.confirmDeleteAll("Game", instancia);
+                                    } catch (Exception e) {
+                                        System.out.println("Ha ocurrido un error");
+                                    }
+                                }
+                                case 3 -> {
+                                    try {
+                                        Auxiliar.confirmDeleteAll("Compra", instancia);
+                                    } catch (Exception e) {
+                                        System.out.println("Ha ocurrido un error");
+                                    }
+                                }
+                                case 4 -> {
+                                    System.out.println("Volviendo...");
+                                }
                             }
                         } else {
                             System.out.println("Volviendo...");

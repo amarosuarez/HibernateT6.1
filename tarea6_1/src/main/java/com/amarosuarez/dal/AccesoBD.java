@@ -154,6 +154,7 @@ public class AccesoBD {
      * @param nombreEntidad Nombre de la entidad
      */
     public void borrarTodosLosRegistros(String nombreEntidad) {
+        transaction = session.beginTransaction();
         try {
             String hql = "DELETE FROM " + nombreEntidad;
             session.createQuery(hql).executeUpdate();

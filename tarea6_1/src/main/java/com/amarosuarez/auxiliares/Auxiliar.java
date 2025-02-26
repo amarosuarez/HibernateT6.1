@@ -300,6 +300,31 @@ public class Auxiliar {
     }
 
     /**
+     * Función que un tag y una instancia a la base de datos y
+     * pide la confirmación de la eliminación
+     *
+     * @param tag Tag del objeto
+     * @param instancia Instancia a la base de datos
+     */
+    public static void confirmDeleteAll(String tag, AccesoBD instancia) {
+        String confirm;
+        do {
+            System.out.println();
+            System.out.println("¿Está seguro de que desea eliminar todos los registros de " + tag + "s? (y/n)");
+            confirm = scanner.nextLine();
+
+            if (confirm.equalsIgnoreCase("y")) {
+                instancia.borrarTodosLosRegistros(tag);
+                System.out.println(tag + "s eliminad@s");
+                
+                instancia.rollbackTransaction(Auxiliar.confirmTransaction());
+            } else if (confirm.equalsIgnoreCase("n")) {
+                System.out.println("Operación cancelada");
+            }
+        } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
+    }
+
+    /**
      * Función que pide al usuario si está seguro de eliminar
      *
      * @return Respuesta del usuario (y o n)
