@@ -130,10 +130,10 @@ public class Main {
                         // Leemos la opción
                         opcionBuscarPlayer = Auxiliar.leeEntero(
                                 "¿Por qué campo deseas buscar al Player?\n"
-                                        + "1. ID\n"
-                                        + "2. Nick\n"
-                                        + "3. Email\n"
-                                        + "4. Volver");
+                                + "1. ID\n"
+                                + "2. Nick\n"
+                                + "3. Email\n"
+                                + "4. Volver");
 
                         switch (opcionBuscarPlayer) {
                             case 1 -> {
@@ -219,9 +219,9 @@ public class Main {
                         // Obtenemos la opción
                         opcionGame = Auxiliar.leeEntero(
                                 "¿Por qué campo desea buscar el Game?\n"
-                                        + "1. ID\n"
-                                        + "2. Nombre\n"
-                                        + "3. Volver");
+                                + "1. ID\n"
+                                + "2. Nombre\n"
+                                + "3. Volver");
 
                         switch (opcionGame) {
                             case 1:
@@ -293,12 +293,12 @@ public class Main {
                         // Leemos la opción
                         opcionCompra = Auxiliar.leeEntero(
                                 "¿Por qué campo deseas buscar la compra?\n"
-                                        + "1. ID\n"
-                                        + "2. Player\n"
-                                        + "3. Game\n"
-                                        + "4. Precio\n"
-                                        + "5. Fecha de compra\n"
-                                        + "6. Volver");
+                                + "1. ID\n"
+                                + "2. Player\n"
+                                + "3. Game\n"
+                                + "4. Precio\n"
+                                + "5. Fecha de compra\n"
+                                + "6. Volver");
 
                         switch (opcionCompra) {
                             case 1:
@@ -414,7 +414,7 @@ public class Main {
                                 // Preguntamos y leemos los precios
                                 precioInicio = Auxiliar.leeDouble(
                                         "Va a buscar una compra por franja de precio\n"
-                                                + "¿Cuál es el precio inicial? (-1 para salir)");
+                                        + "¿Cuál es el precio inicial? (-1 para salir)");
 
                                 if (precioInicio != -1) {
                                     precioFin = Auxiliar.leeDouble("¿Cuál es el precio final? (-1 para salir)");
@@ -447,7 +447,7 @@ public class Main {
                                 // Preguntamos y leemos los datos
                                 dia = Auxiliar.leeEntero(
                                         "Va a buscar una compra por su fecha (dd/MM/aaaa)\n"
-                                                + "¿Cuál es el día? (-1 para salir)");
+                                        + "¿Cuál es el día? (-1 para salir)");
 
                                 if (dia != -1) {
                                     mes = Auxiliar.leeEntero("¿Cuál es el mes? (-1 para salir)");
@@ -750,10 +750,10 @@ public class Main {
                         // Leemos la tabla elegida
                         tablaElegida = Auxiliar.leeEntero(
                                 "¿De qué tabla deseas eliminar los registros?\n"
-                                        + "1. Player\n"
-                                        + "2. Game\n"
-                                        + "3. Compra\n"
-                                        + "4. Volver");
+                                + "1. Player\n"
+                                + "2. Game\n"
+                                + "3. Compra\n"
+                                + "4. Volver");
 
                         if (tablaElegida != 4) {
                             confirm = Auxiliar.confirmaBorrado();
@@ -764,6 +764,7 @@ public class Main {
                                         try {
                                             instancia.borrarTodosLosRegistros("Player");
                                             System.out.println("Players borrados");
+
                                         } catch (Exception e) {
                                             System.out.println("Ha ocurrido un error");
                                         }
@@ -772,6 +773,7 @@ public class Main {
                                         try {
                                             instancia.borrarTodosLosRegistros("Game");
                                             System.out.println("Games borrados");
+
                                         } catch (Exception e) {
                                             System.out.println("Ha ocurrido un error");
                                         }
@@ -780,9 +782,13 @@ public class Main {
                                         try {
                                             instancia.borrarTodosLosRegistros("Compra");
                                             System.out.println("Compras borradas");
+
                                         } catch (Exception e) {
                                             System.out.println("Ha ocurrido un error");
                                         }
+                                    }
+                                    case 4 -> {
+                                        System.out.println("Volviendo...");
                                     }
                                 }
                             } else {
@@ -811,10 +817,10 @@ public class Main {
             // Leemos la opción
             opcion = Auxiliar.leeEntero(
                     "¿Por qué campo desea eliminar?\n"
-                            + "1. ID\n"
-                            + "2. Nick\n"
-                            + "3. Email\n"
-                            + "4. Volver");
+                    + "1. ID\n"
+                    + "2. Nick\n"
+                    + "3. Email\n"
+                    + "4. Volver");
 
             switch (opcion) {
                 case 1 -> {
@@ -831,6 +837,7 @@ public class Main {
                             Auxiliar.muestraPlayerElegido(player);
 
                             Auxiliar.confirmDelete(player, "Player", instancia);
+
                         } catch (Exception e) {
                             System.out.println("No se ha encontrado ningún player con ese ID");
                         }
@@ -865,6 +872,7 @@ public class Main {
                                 Auxiliar.muestraPlayerElegido(player);
 
                                 Auxiliar.confirmDelete(player, "Player", instancia);
+
                             } else {
                                 System.out.println("Volviendo...");
                             }
@@ -898,6 +906,7 @@ public class Main {
                                 Auxiliar.muestraPlayerElegido(player);
 
                                 Auxiliar.confirmDelete(player, "Player", instancia);
+
                             } else {
                                 System.out.println("Volviendo...");
                             }
@@ -923,9 +932,9 @@ public class Main {
             // Leemos la opción
             opcion = Auxiliar.leeEntero(
                     "¿Por qué campo desea eliminar?\n"
-                            + "1. ID\n"
-                            + "2. Nombre\n"
-                            + "3. Volver");
+                    + "1. ID\n"
+                    + "2. Nombre\n"
+                    + "3. Volver");
 
             switch (opcion) {
                 case 1 -> {
@@ -942,6 +951,7 @@ public class Main {
                             Auxiliar.muestraGameElegido(game);
 
                             Auxiliar.confirmDelete(game, "Game", instancia);
+
                         } catch (Exception e) {
                             System.out.println("No se ha encontrado ningún game con ese ID");
                         }
@@ -972,6 +982,7 @@ public class Main {
                                 Auxiliar.muestraGameElegido(game);
 
                                 Auxiliar.confirmDelete(game, "Game", instancia);
+
                             } else {
                                 System.out.println("Volviendo...");
                             }
@@ -992,12 +1003,12 @@ public class Main {
             // Leemos la opción
             opcion = Auxiliar.leeEntero(
                     "¿Por qué campo desea eliminar?\n"
-                            + "1. ID\n"
-                            + "2. Player\n"
-                            + "3. Game\n"
-                            + "4. Precio\n"
-                            + "5. Fecha de compra\n"
-                            + "6. Volver");
+                    + "1. ID\n"
+                    + "2. Player\n"
+                    + "3. Game\n"
+                    + "4. Precio\n"
+                    + "5. Fecha de compra\n"
+                    + "6. Volver");
 
             switch (opcion) {
                 case 1 -> {
@@ -1011,6 +1022,9 @@ public class Main {
                             Compra compra = (Compra) instancia.buscarPorId("getCompraById", id);
 
                             Auxiliar.muestraCompraElegida(compra, instancia);
+
+                            Auxiliar.confirmDelete(compra, "compra", instancia);
+
                         } catch (Exception e) {
                             System.out.println("No se ha encontrado ninguna compra con ese ID");
                         }
@@ -1061,6 +1075,7 @@ public class Main {
 
                                 if (compraOpcion != -1) {
                                     Auxiliar.confirmDelete(compras.get(compraOpcion), "compra", instancia);
+
                                 } else {
                                     System.out.println("Volviendo...");
                                 }
@@ -1112,6 +1127,7 @@ public class Main {
 
                                 if (compraOpcion != -1) {
                                     Auxiliar.confirmDelete(compras.get(compraOpcion), "compra", instancia);
+
                                 } else {
                                     System.out.println("Volviendo...");
                                 }
@@ -1145,6 +1161,7 @@ public class Main {
 
                         if (compraOpcion != -1) {
                             Auxiliar.confirmDelete(compras.get(compraOpcion), "compra", instancia);
+
                         } else {
                             System.out.println("Volviendo...");
                         }
@@ -1174,6 +1191,7 @@ public class Main {
 
                             if (compraOpcion != -1) {
                                 Auxiliar.confirmDelete(compras.get(compraOpcion), "Compra", instancia);
+
                             } else {
                                 System.out.println("Volviendo...");
                             }

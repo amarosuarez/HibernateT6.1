@@ -12,6 +12,8 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import com.amarosuarez.entities.Compra;
+import com.amarosuarez.entities.Game;
+import com.amarosuarez.entities.Player;
 
 /**
  * Clase que almacena los métodos relacionados a la Base de Datos
@@ -62,19 +64,29 @@ public class AccesoBD {
     public void abrir() throws Exception {
         setUp();
         session = sf.openSession();
-        transaction = session.beginTransaction();
+        // transaction = session.beginTransaction();
     }
 
     /**
      * Función que cierra la transacción y la base de datos
      */
     public void cerrar() {
-        try {
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
+        if (transaction != null && transaction.isActive()) {
+            try {
+                transaction.commit(); // Confirmar la transacción si está activa
+            } catch (Exception e) {
+                try {
+                    transaction.rollback(); // Revertir la transacción en caso de error
+                } catch (Exception ex) {
+                    ex.printStackTrace(); // Manejar errores durante el rollback
+                }
+                e.printStackTrace(); // Manejar errores durante el commit
+            }
         }
-        sf.close();
+
+        if (sf != null) {
+            sf.close(); // Cerrar la SessionFactory
+        }
     }
 
     /**
@@ -93,7 +105,47 @@ public class AccesoBD {
      * @param cosa Objeto a eliminar
      */
     public void borrar(Object cosa) {
-        session.delete(cosa);
+        // session.delete(cosa);
+        String hql;
+        String nombreEntidad = "";
+        String parametro = "";
+        int valorParametro = 0;
+
+        try {
+            // Verificar si la sesión está abierta
+            if (session.isOpen()) {
+                // Iniciar una transacción
+                transaction = session.beginTransaction();
+                
+                // Comprobamos de que clase es el objeto
+                if (cosa instanceof Player player) {
+                    nombreEntidad = "Player";
+                    parametro = "idPlayer";
+                    valorParametro = player.getIdPlayer();
+                } else if (cosa instanceof Game game) {
+                    nombreEntidad = "Game";
+                    parametro = "idGame";
+                    valorParametro = game.getIdGame();
+                } else if (cosa instanceof Compra compra) {
+                    nombreEntidad = "Compra";
+                    parametro = "idCompra";
+                    valorParametro = compra.getIdCompra();
+                }
+
+                hql = "DELETE FROM " + nombreEntidad + " WHERE " + parametro + " = :" + parametro;
+
+                // Ejecutar la consulta
+                session.createQuery(hql)
+                        .setParameter(parametro, valorParametro)
+                        .executeUpdate();
+            }
+        } catch (Exception e) {
+            // Revertir la transacción en caso de error
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -105,28 +157,30 @@ public class AccesoBD {
         try {
             String hql = "DELETE FROM " + nombreEntidad;
             session.createQuery(hql).executeUpdate();
-            transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) {
+            if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close(); // Cerrar la sesión
-            }
         }
     }
 
     /**
      * Función que recibe un booleano y hace commit o rollback
-     * @param commit Booleano que indica si se hace commit o rollback
+     *
+     * @param rollback Booleano que indica si se hace commit o rollback
      */
-    public void commitTransaction(boolean commit) {
-        if (commit) {
-            transaction.commit();
-        } else {
-            transaction.rollback();
+    public void rollbackTransaction(boolean rollback) {
+        try {
+            if (!rollback) {
+                transaction.commit();
+                System.out.println("Cambios guardados!✅");
+            } else {
+                transaction.rollback();
+                System.out.println("Cambios descartados❌");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -146,8 +200,8 @@ public class AccesoBD {
      * Función que devuelve una lista buscada por un parámetro determinado
      *
      * @param namedQuery Nombre de la query
-     * @param parametro  Nombre del parámetro
-     * @param valor      Valor del parámetro
+     * @param parametro Nombre del parámetro
+     * @param valor Valor del parámetro
      * @return Lista
      */
     public List listarConParametros(String namedQuery, String parametro, String valor) {
@@ -161,8 +215,8 @@ public class AccesoBD {
      * valor es int
      *
      * @param namedQuery Nombre de la query
-     * @param parametro  Nombre del parámetro
-     * @param valor      Valor del parámetro (int)
+     * @param parametro Nombre del parámetro
+     * @param valor Valor del parámetro (int)
      * @return Lista
      */
     public List listarConParametros(String namedQuery, String parametro, int valor) {
@@ -189,7 +243,7 @@ public class AccesoBD {
 
     /**
      * Función que devuelve una lista de compras filtradas por precio
-     * 
+     *
      * @param precio Precio de la compra
      * @return Lista de compras
      */
@@ -204,7 +258,7 @@ public class AccesoBD {
      * Función que devuelve un objeto buscado por id
      *
      * @param namedQuery Nombre de la query
-     * @param id         Id a buscar
+     * @param id Id a buscar
      * @return Objeto
      */
     public Object buscarPorId(String namedQuery, int id) {
@@ -217,8 +271,8 @@ public class AccesoBD {
      * Función que busca por parámetro especificado
      *
      * @param namedQuery Nombre de la query
-     * @param parametro  Nombre del parámetro
-     * @param valor      Valor del parámetro (String)
+     * @param parametro Nombre del parámetro
+     * @param valor Valor del parámetro (String)
      * @return Lista de los objetos encontrados
      */
     public List buscarPorParametro(String namedQuery, String parametro, String valor) {

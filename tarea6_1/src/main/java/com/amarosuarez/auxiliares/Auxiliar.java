@@ -291,6 +291,8 @@ public class Auxiliar {
             if (confirm.equalsIgnoreCase("y")) {
                 instancia.borrar(object);
                 System.out.println(tag + " eliminad@");
+                
+                instancia.rollbackTransaction(Auxiliar.confirmTransaction());
             } else if (confirm.equalsIgnoreCase("n")) {
                 System.out.println("Operación cancelada");
             }
@@ -299,6 +301,7 @@ public class Auxiliar {
 
     /**
      * Función que pide al usuario si está seguro de eliminar
+     *
      * @return Respuesta del usuario (y o n)
      */
     public static String confirmaBorrado() {
@@ -311,6 +314,23 @@ public class Auxiliar {
         } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
 
         return confirm;
+    }
+
+    /**
+     * Función que pregunta al usuario si desea revertir la acción
+     *
+     * @return Desea revertir la acción
+     */
+    public static boolean confirmTransaction() {
+        String res = "";
+
+        do {
+            System.out.println();
+            System.out.println("¿Desea revertir la acción? (y/n)");
+            res = scanner.nextLine();
+        } while (!res.equalsIgnoreCase("y") && !res.equalsIgnoreCase("n"));
+
+        return res.equalsIgnoreCase("y");
     }
 
     /**
@@ -417,6 +437,7 @@ public class Auxiliar {
 
     /**
      * Función que pide al usuario que ingrese una fecha
+     *
      * @return Fecha completa
      */
     public static String pideFecha() {
