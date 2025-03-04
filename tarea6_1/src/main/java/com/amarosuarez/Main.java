@@ -829,7 +829,8 @@ public class Main {
                         if (opcionPlayer != 4 && player != null) {
                             // Preguntamos por el nuevo nick
                             nick = Auxiliar
-                                    .leeString("Nick actual: " + player.getNick() + "\n¿Cuál es el nuevo nick? (ENTER para usar el anterior, -1 para salir)");
+                                    .leeString("Nick actual: " + player.getNick()
+                                            + "\n¿Cuál es el nuevo nick? (ENTER para usar el anterior, -1 para salir)");
 
                             if (!nick.equals("-1")) {
                                 if (nick.isEmpty()) {
@@ -838,7 +839,8 @@ public class Main {
 
                                 // Preguntamos por el nuevo mail
                                 mail = Auxiliar.leeString(
-                                        "Email actual: " + player.getEmail() + "\n¿Cuál es el nuevo email? (ENTER para usar el anterior, -1 para salir)");
+                                        "Email actual: " + player.getEmail()
+                                                + "\n¿Cuál es el nuevo email? (ENTER para usar el anterior, -1 para salir)");
 
                                 if (!mail.equals("-1")) {
                                     if (mail.isEmpty()) {
@@ -847,7 +849,8 @@ public class Main {
 
                                     // Preguntamos por la nuevo password
                                     password = Auxiliar.leeString(
-                                            "Contraseña actual: " + player.getPassword() + "\n¿Cuál es la nueva contraseña? (ENTER para usar el anterior, -1 para salir)");
+                                            "Contraseña actual: " + player.getPassword()
+                                                    + "\n¿Cuál es la nueva contraseña? (ENTER para usar el anterior, -1 para salir)");
 
                                     if (!password.equals("-1")) {
                                         if (password.isEmpty()) {
@@ -876,6 +879,146 @@ public class Main {
                 }
                 case 2 -> {
                     // Game
+                    String name;
+                    int horas = -2;
+                    int minutos = -2;
+                    int segundos = -2;
+                    int opcionGame;
+                    int idGame;
+                    Game game = null;
+
+                    // Preguntamos por cual campo desea buscar el Game
+                    do {
+                        opcionGame = Auxiliar.leeEntero(
+                                "¿Cómo desea buscar al Game?\n" +
+                                        "1. Por su ID\n" +
+                                        "2. Por su Nombre\n" +
+                                        "3. Volver");
+
+                        switch (opcionGame) {
+                            case 1 -> {
+                                // ID
+                                idGame = Auxiliar.leeEntero("¿Cuál es su ID? (-1 para salir)");
+
+                                if (idGame > -1) {
+                                    try {
+                                        game = (Game) instancia.buscarPorId("getGameById", idGame);
+                                    } catch (Exception e) {
+                                        System.out.println("No se ha encontrado ningún game con ese ID");
+                                    }
+                                } else {
+                                    System.out.println("Saliendo...");
+                                }
+                            }
+                            case 2 -> {
+                                // Nombre
+                                name = Auxiliar.leeString("¿Cuál es el nombre? (-1 para salir)");
+
+                                if (!name.equals("-1")) {
+                                    int gameOption = 0;
+                                    List<Game> games = Auxiliar.getAllGamesByName(name, instancia);
+
+                                    if (games != null && !games.isEmpty()) {
+                                        if (games.size() > 1) {
+                                            Auxiliar.pintaGames(games);
+
+                                            do {
+                                                // Leemos la opción
+                                                gameOption = Auxiliar.leeEntero(
+                                                        "Escribe el número de opción del game que deseas seleccionar (-1 para volver)");
+                                            } while (gameOption > games.size());
+                                        }
+
+                                        if (gameOption != -1) {
+                                            game = games.get(gameOption);
+                                            Auxiliar.muestraGameElegido(game);
+
+                                        } else {
+                                            System.out.println("Volviendo...");
+                                        }
+                                    } else {
+                                        System.out.println("No se ha encontrado ningún player con ese nick");
+                                    }
+                                } else {
+                                    System.out.println("Volviendo...");
+                                }
+                            }
+                        }
+
+                        if (opcionGame != 3 && game != null) {
+                            // Preguntamos por el nuevo nombre
+                            name = Auxiliar
+                                    .leeString("Nombre actual: " + game.getNombre()
+                                            + "\n¿Cuál es el nuevo nombre? (ENTER para usar el anterior, -1 para salir)");
+
+                            if (!name.equals("-1")) {
+                                if (name.isEmpty()) {
+                                    name = game.getNombre();
+                                }
+
+                                // Preguntamos por las nuevas horas
+                                do {
+                                    horas = Auxiliar.leeEntero(
+                                        "Horas actual: " + game.getTiempoJugado().split(":")[0]
+                                                + "\n¿Cuales son las nuevas horas jugadas? (-2 para usar el anterior, -1 para salir)");
+                                } while (horas < -2 || horas > 23);
+
+                                if (horas != -1) {
+                                    if (horas == -2) {
+                                        horas = Integer.parseInt(game.getTiempoJugado().split(":")[0]);
+                                    }
+
+                                    // Preguntamos por los nuevos minutos
+                                    do {
+                                        minutos = Auxiliar.leeEntero(
+                                            "Minutos actual: " + game.getTiempoJugado().split(":")[1]
+                                                    + "\n¿Cuales son los nuevos minutos jugados? (-2 para usar el anterior, -1 para salir)");
+                                    } while (minutos < -2 || minutos > 59);
+
+                                    if (minutos != -1) {
+                                        if (minutos == -2) {
+                                            minutos = Integer.parseInt(game.getTiempoJugado().split(":")[1]);
+                                        }
+
+                                        // Preguntamos por los nuevos segundos
+                                        do {
+                                            segundos = Auxiliar.leeEntero(
+                                                "Segundos actual: " + game.getTiempoJugado().split(":")[2]
+                                                        + "\n¿Cuales son los nuevos segundos jugados? (-2 para usar el anterior, -1 para salir)");
+                                        } while (segundos < -2 || segundos > 59);
+
+                                        if (segundos != -1) {
+                                            if (segundos == -2) {
+                                                segundos = Integer.parseInt(game.getTiempoJugado().split(":")[2]);
+                                            }
+
+                                            // Actualizamos
+                                            String tiempoJugado = (horas > 10 ? horas : "0"+horas) + ":" + (minutos > 10 ? minutos : "0"+minutos) + ":" + (segundos > 10 ? segundos : "0"+segundos);
+                                            game.setNombre(name);
+                                            game.setTiempoJugado(tiempoJugado);
+                                            Object ob = instancia.actualizar(game);
+
+                                            if (ob != null) {
+                                                System.out.println("Game actualizado");
+                                            } else {
+                                                System.out.println(
+                                                        "Ha ocurrido un error al intentar actualizar el game");
+                                            }
+                                        } else {
+                                            System.out.println("Volviendo...");
+                                        }
+                                    } else {
+                                        System.out.println("Volviendo...");
+                                    }
+                                } else {
+                                    System.out.println("Volviendo...");
+                                }
+                            } else {
+                                System.out.println("Volviendo...");
+                            }
+                        }
+                    } while (opcionGame != 3);
+                    System.out.println("Volviendo...");
                 }
                 case 3 -> {
                     // Compra
