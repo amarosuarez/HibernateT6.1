@@ -52,6 +52,19 @@ public class Main {
                         mostrarAnyadirOpcion(opcionAnyadir);
                     } while (opcionAnyadir != 4);
                 }
+                case 3 -> {
+                    // EDITAR
+                    int opcionEditar;
+
+                    do {
+                        // Mostramos el menú de editar y recogemos la opción elegida
+                        opcionEditar = Auxiliar.leeEntero(menuEditar());
+
+                        // Ejecutamos la opción seleccioanda
+                        mostrarEditarOpcion(opcionEditar);
+                    } while (opcionEditar != 4);
+                    System.out.println("Volviendo...");
+                }
                 case 4 -> {
                     // ELIMINAR
                     int opcionEliminar;
@@ -133,10 +146,10 @@ public class Main {
                         // Leemos la opción
                         opcionBuscarPlayer = Auxiliar.leeEntero(
                                 "¿Por qué campo deseas buscar al Player?\n"
-                                + "1. ID\n"
-                                + "2. Nick\n"
-                                + "3. Email\n"
-                                + "4. Volver");
+                                        + "1. ID\n"
+                                        + "2. Nick\n"
+                                        + "3. Email\n"
+                                        + "4. Volver");
 
                         switch (opcionBuscarPlayer) {
                             case 1 -> {
@@ -222,9 +235,9 @@ public class Main {
                         // Obtenemos la opción
                         opcionGame = Auxiliar.leeEntero(
                                 "¿Por qué campo desea buscar el Game?\n"
-                                + "1. ID\n"
-                                + "2. Nombre\n"
-                                + "3. Volver");
+                                        + "1. ID\n"
+                                        + "2. Nombre\n"
+                                        + "3. Volver");
 
                         switch (opcionGame) {
                             case 1:
@@ -296,12 +309,12 @@ public class Main {
                         // Leemos la opción
                         opcionCompra = Auxiliar.leeEntero(
                                 "¿Por qué campo deseas buscar la compra?\n"
-                                + "1. ID\n"
-                                + "2. Player\n"
-                                + "3. Game\n"
-                                + "4. Precio\n"
-                                + "5. Fecha de compra\n"
-                                + "6. Volver");
+                                        + "1. ID\n"
+                                        + "2. Player\n"
+                                        + "3. Game\n"
+                                        + "4. Precio\n"
+                                        + "5. Fecha de compra\n"
+                                        + "6. Volver");
 
                         switch (opcionCompra) {
                             case 1:
@@ -417,7 +430,7 @@ public class Main {
                                 // Preguntamos y leemos los precios
                                 precioInicio = Auxiliar.leeDouble(
                                         "Va a buscar una compra por franja de precio\n"
-                                        + "¿Cuál es el precio inicial? (-1 para salir)");
+                                                + "¿Cuál es el precio inicial? (-1 para salir)");
 
                                 if (precioInicio != -1) {
                                     precioFin = Auxiliar.leeDouble("¿Cuál es el precio final? (-1 para salir)");
@@ -450,7 +463,7 @@ public class Main {
                                 // Preguntamos y leemos los datos
                                 dia = Auxiliar.leeEntero(
                                         "Va a buscar una compra por su fecha (dd/MM/aaaa)\n"
-                                        + "¿Cuál es el día? (-1 para salir)");
+                                                + "¿Cuál es el día? (-1 para salir)");
 
                                 if (dia != -1) {
                                     mes = Auxiliar.leeEntero("¿Cuál es el mes? (-1 para salir)");
@@ -696,6 +709,135 @@ public class Main {
         }
     }
 
+    // Función que pinta el menú de editar
+    private static String menuEditar() {
+        String menu = "";
+        menu += "¿Qué deseas editar?\n";
+        menu += "1. Player\n";
+        menu += "2. Game\n";
+        menu += "3. Compra\n";
+        menu += "4. Volver al menú principal";
+
+        return menu;
+    }
+
+    // Función que muestra los resultados de la opción elegida de editar
+    private static void mostrarEditarOpcion(int opcionEditar) {
+        try {
+            instancia.abrir();
+
+            switch (opcionEditar) {
+                case 1 -> {
+                    // Player
+                    String nick;
+                    String mail;
+                    String password;
+                    int idPlayer;
+                    int opcionPlayer;
+                    Player player;
+
+                    // Preguntamos por cuál campo desea buscar al player
+                    do {
+                        opcionPlayer = Auxiliar.leeEntero(
+                                "¿Cómo desea buscar al Player?\n" +
+                                        "1. Por su ID\n" +
+                                        "2. Por su Nick\n" +
+                                        "3. Por su Email\n" +
+                                        "4. Volver");
+
+                        switch (opcionPlayer) {
+                            case 1 -> {
+                                // ID
+                                idPlayer = Auxiliar.leeEntero("¿Cuál es su ID? (-1 para salir)");
+
+                                if (idPlayer > -1) {
+                                    player = (Player) instancia.buscarPorId("getPlayerById", idPlayer);
+                                } else {
+                                    System.out.println("Saliendo...");
+                                }
+                            }
+                            case 2 -> {
+                                // Nick
+                                nick = Auxiliar.leeString("¿Cuál es el nick? (-1 para salir)");
+
+                                if (!nick.equals("-1")) {
+                                    int playerOption = 0;
+                                    List<Player> players = Auxiliar.getAllPlayersByNick(nick, instancia);
+
+                                    if (players != null && !players.isEmpty()) {
+                                        if (players.size() > 1) {
+                                            Auxiliar.pintaPlayers(players);
+
+                                            do {
+                                                // Leemos la opción
+                                                playerOption = Auxiliar.leeEntero(
+                                                        "Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
+                                            } while (playerOption > players.size());
+                                        }
+
+                                        if (playerOption != -1) {
+                                            player = players.get(playerOption);
+                                            Auxiliar.muestraPlayerElegido(player);
+
+                                        } else {
+                                            System.out.println("Volviendo...");
+                                        }
+                                    } else {
+                                        System.out.println("No se ha encontrado ningún player con ese nick");
+                                    }
+                                } else {
+                                    System.out.println("Volviendo...");
+                                }
+                            }
+                            case 3 -> {
+                                // Email
+                                mail = Auxiliar.leeString("¿Cuál es el email? (-1 para salir)");
+
+                                if (!mail.equals("-1")) {
+                                    int playerOption = 0;
+                                    List<Player> players = Auxiliar.getAllPlayersByEmail(mail, instancia);
+
+                                    if (players != null && !players.isEmpty()) {
+                                        if (players.size() > 1) {
+                                            Auxiliar.pintaPlayers(players);
+
+                                            do {
+                                                // Leemos la opción
+                                                playerOption = Auxiliar.leeEntero(
+                                                        "Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
+                                            } while (playerOption > players.size());
+                                        }
+
+                                        if (playerOption != -1) {
+                                            player = players.get(playerOption);
+                                            Auxiliar.muestraPlayerElegido(player);
+
+                                        } else {
+                                            System.out.println("Volviendo...");
+                                        }
+                                    } else {
+                                        System.out.println("No se ha encontrado ningún player con ese email");
+                                    }
+                                }
+                            }
+                        }
+                    } while (opcionPlayer != 4);
+                    System.out.println("Volviendo...");
+                }
+                case 2 -> {
+                    // Game
+                }
+                case 3 -> {
+                    // Compra
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al abrir la instancia:" + e.getMessage());
+        } finally {
+            instancia.cerrar();
+        }
+    }
+
     // Función que pinta el menú de eliminar
     private static String menuEliminar() {
         String menu = "";
@@ -753,10 +895,10 @@ public class Main {
                         // Leemos la tabla elegida
                         tablaElegida = Auxiliar.leeEntero(
                                 "¿De qué tabla deseas eliminar los registros?\n"
-                                + "1. Player\n"
-                                + "2. Game\n"
-                                + "3. Compra\n"
-                                + "4. Volver");
+                                        + "1. Player\n"
+                                        + "2. Game\n"
+                                        + "3. Compra\n"
+                                        + "4. Volver");
 
                         if (tablaElegida != 4) {
                             switch (tablaElegida) {
@@ -799,10 +941,10 @@ public class Main {
                         // Leemos la tabla elegida
                         tablaElegida = Auxiliar.leeEntero(
                                 "¿De qué tabla deseas eliminar los registros?\n"
-                                + "1. Player\n"
-                                + "2. Game\n"
-                                + "3. Compra\n"
-                                + "4. Volver");
+                                        + "1. Player\n"
+                                        + "2. Game\n"
+                                        + "3. Compra\n"
+                                        + "4. Volver");
 
                         if (tablaElegida != 4) {
                             switch (tablaElegida) {
@@ -860,10 +1002,10 @@ public class Main {
             // Leemos la opción
             opcion = Auxiliar.leeEntero(
                     "¿Por qué campo desea eliminar?\n"
-                    + "1. ID\n"
-                    + "2. Nick\n"
-                    + "3. Email\n"
-                    + "4. Volver");
+                            + "1. ID\n"
+                            + "2. Nick\n"
+                            + "3. Email\n"
+                            + "4. Volver");
 
             switch (opcion) {
                 case 1 -> {
@@ -975,9 +1117,9 @@ public class Main {
             // Leemos la opción
             opcion = Auxiliar.leeEntero(
                     "¿Por qué campo desea eliminar?\n"
-                    + "1. ID\n"
-                    + "2. Nombre\n"
-                    + "3. Volver");
+                            + "1. ID\n"
+                            + "2. Nombre\n"
+                            + "3. Volver");
 
             switch (opcion) {
                 case 1 -> {
@@ -1046,12 +1188,12 @@ public class Main {
             // Leemos la opción
             opcion = Auxiliar.leeEntero(
                     "¿Por qué campo desea eliminar?\n"
-                    + "1. ID\n"
-                    + "2. Player\n"
-                    + "3. Game\n"
-                    + "4. Precio\n"
-                    + "5. Fecha de compra\n"
-                    + "6. Volver");
+                            + "1. ID\n"
+                            + "2. Player\n"
+                            + "3. Game\n"
+                            + "4. Precio\n"
+                            + "5. Fecha de compra\n"
+                            + "6. Volver");
 
             switch (opcion) {
                 case 1 -> {
