@@ -300,7 +300,7 @@ public class Auxiliar {
     }
 
     /**
-     * Función que un tag y una instancia a la base de datos y
+     * Función que recibe un tag y una instancia a la base de datos y
      * pide la confirmación de la eliminación
      *
      * @param tag Tag del objeto
@@ -323,6 +323,55 @@ public class Auxiliar {
             }
         } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
     }
+
+    /**
+     * Función que recibe un tag y una instancia a la base de datos y
+     * pide la confirmación de la eliminación
+     *
+     * @param tag Tag del objeto
+     * @param instancia Instancia a la base de datos
+     */
+    public static void confirmDeleteTable(String tag, AccesoBD instancia) {
+        String confirm;
+        do {
+            System.out.println();
+            System.out.println("¿Está seguro de que desea eliminar la tabla " + tag + "? (y/n)");
+            confirm = scanner.nextLine();
+
+            if (confirm.equalsIgnoreCase("y")) {
+                instancia.borraTabla(tag);
+                System.out.println("Tabla " + tag + " eliminada");
+                
+                instancia.rollbackTransaction(Auxiliar.confirmTransaction());
+            } else if (confirm.equalsIgnoreCase("n")) {
+                System.out.println("Operación cancelada");
+            }
+        } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
+    }
+
+    /**
+     * Función que recibe una instancia de la base de datos y pide la confirmación del borrado de las tablas
+     *
+     * @param instancia Instancia de la base de datos
+     */
+    public static void confirmDeleteAllTables(AccesoBD instancia) {
+        String confirm;
+        do {
+            System.out.println();
+            System.out.println("¿Está seguro de que desea eliminar todas las tablas? (y/n)");
+            confirm = scanner.nextLine();
+
+            if (confirm.equalsIgnoreCase("y")) {
+                instancia.borrarTodasLasTablas();
+                System.out.println("Tablas eliminadas");
+                
+                instancia.rollbackTransaction(Auxiliar.confirmTransaction());
+            } else if (confirm.equalsIgnoreCase("n")) {
+                System.out.println("Operación cancelada");
+            }
+        } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
+    }
+
 
     /**
      * Función que pide al usuario si está seguro de eliminar

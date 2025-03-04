@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.query.NativeQuery;
 
 import com.amarosuarez.entities.Compra;
 import com.amarosuarez.entities.Game;
@@ -93,21 +94,29 @@ public class AccesoBD {
      * Función que crea la tabla players
      */
     public void crearTablaPlayers() {
-        try {
-            String sql = "CREATE TABLE Players("
-                    + "idPlayer int Primary Key auto_increment,"
-                    + "nick varchar(45),"
-                    + "password varchar(128),"
-                    + "email varchar(100));";
+        if (!tablaExiste("Players")) {
+            try {
+                abrir();
+                transaction = session.beginTransaction(); // 🔴 Iniciar la transacción
 
-            // Ejecutar la sentencia SQL nativa
-            session.createNativeQuery(sql).executeUpdate();
-        } catch (Exception e) {
-            // Revertir la transacción en caso de error
-            if (transaction != null) {
-                transaction.rollback();
+                String sql = "CREATE TABLE Players("
+                        + "idPlayer int Primary Key auto_increment,"
+                        + "nick varchar(45),"
+                        + "password varchar(128),"
+                        + "email varchar(100));";
+
+                session.createNativeQuery(sql).executeUpdate();
+
+                transaction.commit(); // 🟢 Confirmar la transacción
+                System.out.println("Tabla Players creada");
+            } catch (Exception e) {
+                if (transaction != null && transaction.isActive()) {
+                    transaction.rollback(); // 🔄 Revertir si hay un error
+                }
+                e.printStackTrace();
+            } finally {
+                cerrar();
             }
-            e.printStackTrace();
         }
     }
 
@@ -115,20 +124,30 @@ public class AccesoBD {
      * Función que crea la tabla games
      */
     public void crearTablaGames() {
-        try {
-            String sql = "CREATE TABLE Games("
-                    + "idGame int Primary Key auto_increment,"
-                    + "nombre varchar(45),"
-                    + "tiempoJugado varchar(50));";
+        if (!tablaExiste("Games")) {
+            try {
+                abrir();
+                transaction = session.beginTransaction();
 
-            // Ejecutar la sentencia SQL nativa
-            session.createNativeQuery(sql).executeUpdate();
-        } catch (Exception e) {
-            // Revertir la transacción en caso de error
-            if (transaction != null) {
-                transaction.rollback();
+                String sql = "CREATE TABLE Games("
+                        + "idGame int Primary Key auto_increment,"
+                        + "nombre varchar(45),"
+                        + "tiempoJugado varchar(50));";
+
+                // Ejecutar la sentencia SQL nativa
+                session.createNativeQuery(sql).executeUpdate();
+
+                transaction.commit(); // 🟢 Confirmar la transacción
+                System.out.println("Tabla Games creada");
+            } catch (Exception e) {
+                // Revertir la transacción en caso de error
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                e.printStackTrace();
+            } finally {
+                cerrar();
             }
-            e.printStackTrace();
         }
     }
 
@@ -136,26 +155,36 @@ public class AccesoBD {
      * Función que crea la tabla compras
      */
     public void crearTablaCompras() {
-        try {
-            String sql = "CREATE TABLE Compras("
-                    + "idCompra int Primary Key auto_increment,"
-                    + "idPlayer int,"
-                    + "idGame int,"
-                    + "cosa Varchar(25),"
-                    + "precio decimal(6,2),"
-                    + "fechaCompra DATE,"
-                    + "FOREIGN KEY (idPlayer) REFERENCES Players(idPlayer), "
-                    + "FOREIGN KEY (idGame) REFERENCES Games(idGame)"
-                    + ");";
+        if (!tablaExiste("Compras")) {
+            try {
+                abrir();
+                transaction = session.beginTransaction();
 
-            // Ejecutar la sentencia SQL nativa
-            session.createNativeQuery(sql).executeUpdate();
-        } catch (Exception e) {
-            // Revertir la transacción en caso de error
-            if (transaction != null) {
-                transaction.rollback();
+                String sql = "CREATE TABLE Compras("
+                        + "idCompra int Primary Key auto_increment,"
+                        + "idPlayer int,"
+                        + "idGame int,"
+                        + "cosa Varchar(25),"
+                        + "precio decimal(6,2),"
+                        + "fechaCompra DATE,"
+                        + "FOREIGN KEY (idPlayer) REFERENCES Players(idPlayer) ON DELETE CASCADE, "
+                        + "FOREIGN KEY (idGame) REFERENCES Games(idGame) ON DELETE CASCADE"
+                        + ");";
+
+                // Ejecutar la sentencia SQL nativa
+                session.createNativeQuery(sql).executeUpdate();
+
+                transaction.commit(); // 🟢 Confirmar la transacción
+                System.out.println("Tabla Compras creada");
+            } catch (Exception e) {
+                // Revertir la transacción en caso de error
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                e.printStackTrace();
+            } finally {
+                cerrar();
             }
-            e.printStackTrace();
         }
     }
 
@@ -163,9 +192,41 @@ public class AccesoBD {
      * Función que crea todas las tablas
      */
     public void crearTablas() {
-        crearTablaPlayers();
-        crearTablaGames();
-        crearTablaCompras();
+        try {
+            crearTablaPlayers();
+            crearTablaGames();
+            crearTablaCompras();
+        } catch (Exception e) {
+            // Error
+        }
+    }
+
+    /**
+     * Verifica si existe una tabla en la base de datos
+     * 
+     * @param nombreTabla nombre de la tabla a verificar
+     * @return true si la tabla existe, false en caso contrario
+     */
+    public boolean tablaExiste(String nombreTabla) {
+        boolean existe = false;
+
+        try {
+            abrir(); // Asegurar que la sesión está abierta
+
+            String sql = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = :nombreTabla";
+            NativeQuery<?> query = session.createNativeQuery(sql);
+            query.setParameter("nombreTabla", nombreTabla);
+
+            Number count = (Number) query.getSingleResult(); // Hibernate devuelve un Number, lo casteamos
+            existe = count.intValue() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cerrar(); // Cerrar la sesión correctamente
+        }
+
+        return existe;
     }
 
     /**
@@ -175,7 +236,15 @@ public class AccesoBD {
      * @return Objeto
      */
     public Object guardar(Object cosa) {
-        return session.save(cosa);
+        try { // ✅ Se cierra automáticamente
+            Transaction transaction = session.beginTransaction();
+            session.save(cosa);
+            transaction.commit();
+            return cosa;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -246,17 +315,46 @@ public class AccesoBD {
     }
 
     /**
-     * Función que recibe el nombre de una entidad y borra la tabla de la base
+     * Función que recibe el nombre de una tabla y borra la tabla de la base
      * de datos
      *
-     * @param nombreEntidad Nombre de la entidad
+     * @param nombreTabla Nombre de la tabla
      */
-    public void borraTabla(String nombreEntidad) {
-        // Crear la consulta SQL nativa para borrar la tabla
-        String sql = "DROP TABLE IF EXISTS " + nombreEntidad;
+    public void borraTabla(String nombreTabla) {
+        transaction = session.beginTransaction();
 
-        // Ejecutar la consulta SQL nativa
-        session.createNativeQuery(sql).executeUpdate();
+        try {
+            // Crear la consulta SQL nativa para borrar la tabla
+            String sql = "DROP TABLE IF EXISTS " + nombreTabla;
+
+            // Ejecutar la consulta SQL nativa
+            session.createNativeQuery(sql).executeUpdate();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Función que borra todas las tablas de la base de datos
+     */
+    public void borrarTodasLasTablas() {
+        transaction = session.beginTransaction();
+
+        try {
+            // Crear la consulta SQL nativa para borrar la tabla
+            String sql = "DROP TABLE IF EXISTS Compras, Players, Games";
+
+            // Ejecutar la consulta SQL nativa
+            session.createNativeQuery(sql).executeUpdate();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -294,8 +392,8 @@ public class AccesoBD {
      * Función que devuelve una lista buscada por un parámetro determinado
      *
      * @param namedQuery Nombre de la query
-     * @param parametro Nombre del parámetro
-     * @param valor Valor del parámetro
+     * @param parametro  Nombre del parámetro
+     * @param valor      Valor del parámetro
      * @return Lista
      */
     public List listarConParametros(String namedQuery, String parametro, String valor) {
@@ -309,8 +407,8 @@ public class AccesoBD {
      * valor es int
      *
      * @param namedQuery Nombre de la query
-     * @param parametro Nombre del parámetro
-     * @param valor Valor del parámetro (int)
+     * @param parametro  Nombre del parámetro
+     * @param valor      Valor del parámetro (int)
      * @return Lista
      */
     public List listarConParametros(String namedQuery, String parametro, int valor) {
@@ -352,7 +450,7 @@ public class AccesoBD {
      * Función que devuelve un objeto buscado por id
      *
      * @param namedQuery Nombre de la query
-     * @param id Id a buscar
+     * @param id         Id a buscar
      * @return Objeto
      */
     public Object buscarPorId(String namedQuery, int id) {
@@ -365,8 +463,8 @@ public class AccesoBD {
      * Función que busca por parámetro especificado
      *
      * @param namedQuery Nombre de la query
-     * @param parametro Nombre del parámetro
-     * @param valor Valor del parámetro (String)
+     * @param parametro  Nombre del parámetro
+     * @param valor      Valor del parámetro (String)
      * @return Lista de los objetos encontrados
      */
     public List buscarPorParametro(String namedQuery, String parametro, String valor) {

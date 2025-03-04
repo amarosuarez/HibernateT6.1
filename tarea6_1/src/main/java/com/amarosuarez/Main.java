@@ -18,6 +18,9 @@ public class Main {
         int opcion;
         instancia = new AccesoBD();
 
+        // Creamos las tablas que falten
+        instancia.crearTablas();
+
         do {
             // Mostramos el menú y recogemos la opción seleccionada
             opcion = Auxiliar.leeEntero(
@@ -805,21 +808,21 @@ public class Main {
                             switch (tablaElegida) {
                                 case 1 -> {
                                     try {
-                                        Auxiliar.confirmDeleteAll("Player", instancia);
+                                        Auxiliar.confirmDeleteTable("Players", instancia);
                                     } catch (Exception e) {
                                         System.out.println("Ha ocurrido un error");
                                     }
                                 }
                                 case 2 -> {
                                     try {
-                                        Auxiliar.confirmDeleteAll("Game", instancia);
+                                        Auxiliar.confirmDeleteTable("Games", instancia);
                                     } catch (Exception e) {
                                         System.out.println("Ha ocurrido un error");
                                     }
                                 }
                                 case 3 -> {
                                     try {
-                                        Auxiliar.confirmDeleteAll("Compra", instancia);
+                                        Auxiliar.confirmDeleteTable("Compras", instancia);
                                     } catch (Exception e) {
                                         System.out.println("Ha ocurrido un error");
                                     }
@@ -833,6 +836,13 @@ public class Main {
                         }
 
                     } while (tablaElegida != 4);
+                }
+                case 4 -> {
+                    try {
+                        Auxiliar.confirmDeleteAllTables(instancia);
+                    } catch (Exception e) {
+                        System.out.println("Ha ocurrido un error");
+                    }
                 }
             }
         } catch (Exception e) {
