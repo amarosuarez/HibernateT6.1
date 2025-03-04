@@ -167,8 +167,8 @@ public class AccesoBD {
                         + "cosa Varchar(25),"
                         + "precio decimal(6,2),"
                         + "fechaCompra DATE,"
-                        + "FOREIGN KEY (idPlayer) REFERENCES Players(idPlayer) ON DELETE CASCADE, "
-                        + "FOREIGN KEY (idGame) REFERENCES Games(idGame) ON DELETE CASCADE"
+                        + "FOREIGN KEY (idPlayer) REFERENCES Players(idPlayer) ON DELETE CASCADE ON UPDATE CASCADE, "
+                        + "FOREIGN KEY (idGame) REFERENCES Games(idGame) ON DELETE CASCADE ON UPDATE CASCADE"
                         + ");";
 
                 // Ejecutar la sentencia SQL nativa
@@ -337,8 +337,10 @@ public class AccesoBD {
      * de datos
      *
      * @param nombreTabla Nombre de la tabla
+     * @return Tabla borrada
      */
-    public void borraTabla(String nombreTabla) {
+    public boolean borraTabla(String nombreTabla) {
+        boolean borrado = false;
         transaction = session.beginTransaction();
 
         try {
@@ -347,12 +349,15 @@ public class AccesoBD {
 
             // Ejecutar la consulta SQL nativa
             session.createNativeQuery(sql).executeUpdate();
+
+            borrado = true;
         } catch (Exception e) {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
         }
+
+        return borrado;
     }
 
     /**

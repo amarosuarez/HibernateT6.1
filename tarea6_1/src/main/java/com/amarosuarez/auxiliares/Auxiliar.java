@@ -1,5 +1,6 @@
 package com.amarosuarez.auxiliares;
 
+import java.time.LocalDate;
 import java.time.Year;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -135,7 +136,7 @@ public class Auxiliar {
     /**
      * Función que lista una serie de compras
      *
-     * @param compras Lista de compras
+     * @param compras   Lista de compras
      * @param instancia Instancia a la base de datos
      */
     public static void listaCompras(List<Compra> compras, AccesoBD instancia) {
@@ -156,7 +157,7 @@ public class Auxiliar {
     /**
      * Función que lista una serie de compras con opciones
      *
-     * @param compras Lista de compras
+     * @param compras   Lista de compras
      * @param instancia Instancia a la base de datos
      */
     public static void pintaCompras(List<Compra> compras, AccesoBD instancia) {
@@ -213,7 +214,7 @@ public class Auxiliar {
     /**
      * Función que obtiene todos los players que coincidan con un nick
      *
-     * @param nick Nick del player a buscar
+     * @param nick      Nick del player a buscar
      * @param instancia Instancia a la base de datos
      * @return Lista de players
      */
@@ -234,7 +235,7 @@ public class Auxiliar {
     /**
      * Función que obtiene todos los players que coincidan con un email
      *
-     * @param email Email del player a buscar
+     * @param email     Email del player a buscar
      * @param instancia Instancia a la base de datos
      * @return Lista de Players
      */
@@ -255,7 +256,7 @@ public class Auxiliar {
     /**
      * Función que obtiene todos los juegos que coinciden con un nombre
      *
-     * @param name Nombre del juego a buscar
+     * @param name      Nombre del juego a buscar
      * @param instancia Instancia a la base de datos
      * @return Lista de Game
      */
@@ -277,8 +278,8 @@ public class Auxiliar {
      * Función que recibe un objeto, un tag y una instancia a la base de datos y
      * pide la confirmación de la eliminación
      *
-     * @param object Objeto a eliminar
-     * @param tag Tag del objeto
+     * @param object    Objeto a eliminar
+     * @param tag       Tag del objeto
      * @param instancia Instancia a la base de datos
      */
     public static void confirmDelete(Object object, String tag, AccesoBD instancia) {
@@ -291,7 +292,7 @@ public class Auxiliar {
             if (confirm.equalsIgnoreCase("y")) {
                 instancia.borrar(object);
                 System.out.println(tag + " eliminad@");
-                
+
                 instancia.rollbackTransaction(Auxiliar.confirmTransaction());
             } else if (confirm.equalsIgnoreCase("n")) {
                 System.out.println("Operación cancelada");
@@ -303,7 +304,7 @@ public class Auxiliar {
      * Función que recibe un tag y una instancia a la base de datos y
      * pide la confirmación de la eliminación
      *
-     * @param tag Tag del objeto
+     * @param tag       Tag del objeto
      * @param instancia Instancia a la base de datos
      */
     public static void confirmDeleteAll(String tag, AccesoBD instancia) {
@@ -316,7 +317,7 @@ public class Auxiliar {
             if (confirm.equalsIgnoreCase("y")) {
                 instancia.borrarTodosLosRegistros(tag);
                 System.out.println(tag + "s eliminad@s");
-                
+
                 instancia.rollbackTransaction(Auxiliar.confirmTransaction());
             } else if (confirm.equalsIgnoreCase("n")) {
                 System.out.println("Operación cancelada");
@@ -328,7 +329,7 @@ public class Auxiliar {
      * Función que recibe un tag y una instancia a la base de datos y
      * pide la confirmación de la eliminación
      *
-     * @param tag Tag del objeto
+     * @param tag       Tag del objeto
      * @param instancia Instancia a la base de datos
      */
     public static void confirmDeleteTable(String tag, AccesoBD instancia) {
@@ -339,10 +340,15 @@ public class Auxiliar {
             confirm = scanner.nextLine();
 
             if (confirm.equalsIgnoreCase("y")) {
-                instancia.borraTabla(tag);
-                System.out.println("Tabla " + tag + " eliminada");
-                
-                instancia.rollbackTransaction(Auxiliar.confirmTransaction());
+                boolean borrado = instancia.borraTabla(tag);
+
+                if (borrado) {
+                    System.out.println("Tabla " + tag + " eliminada");
+
+                    instancia.rollbackTransaction(Auxiliar.confirmTransaction());
+                } else {
+                    System.out.println("No se ha podido borrar la tabla " + tag);
+                }
             } else if (confirm.equalsIgnoreCase("n")) {
                 System.out.println("Operación cancelada");
             }
@@ -350,7 +356,8 @@ public class Auxiliar {
     }
 
     /**
-     * Función que recibe una instancia de la base de datos y pide la confirmación del borrado de las tablas
+     * Función que recibe una instancia de la base de datos y pide la confirmación
+     * del borrado de las tablas
      *
      * @param instancia Instancia de la base de datos
      */
@@ -364,14 +371,13 @@ public class Auxiliar {
             if (confirm.equalsIgnoreCase("y")) {
                 instancia.borrarTodasLasTablas();
                 System.out.println("Tablas eliminadas");
-                
+
                 instancia.rollbackTransaction(Auxiliar.confirmTransaction());
             } else if (confirm.equalsIgnoreCase("n")) {
                 System.out.println("Operación cancelada");
             }
         } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
     }
-
 
     /**
      * Función que pide al usuario si está seguro de eliminar
@@ -408,10 +414,28 @@ public class Auxiliar {
     }
 
     /**
+     * Función que pide al usuario si desea ejecutar
+     * 
+     * @param mensaje Mensaje a mostrar
+     * @return Respuesta del usuario (y o n)
+     */
+    public static boolean pideEjecutar(String mensaje) {
+        String confirm = "";
+
+        do {
+            System.out.println();
+            System.out.println(mensaje);
+            confirm = scanner.nextLine().toLowerCase();
+        } while (!confirm.equalsIgnoreCase("y") && !confirm.equalsIgnoreCase("n"));
+
+        return confirm.equalsIgnoreCase("y");
+    }
+
+    /**
      * Función que muestra una serie de opciones y pide que se elija uno
      *
      * @param listaSize Tamaño de la lista
-     * @param tag Tag del objeto
+     * @param tag       Tag del objeto
      * @return Opción elegida
      */
     public static int pideElegirOpcionObjeto(int listaSize, String tag) {
@@ -524,7 +548,7 @@ public class Auxiliar {
         do {
             // Pedimos el año
             anyo = Auxiliar.leeEntero("Ingrese el año de la compra (-1 para salir)");
-        } while ((anyo > 0 && anyo < 1900) || anyo < -1);
+        } while ((anyo > 0 && anyo < 1900) || anyo < -1 || anyo > LocalDate.now().getYear());
 
         if (anyo > 0) {
             do {

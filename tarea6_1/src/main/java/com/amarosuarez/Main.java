@@ -959,8 +959,8 @@ public class Main {
                                 // Preguntamos por las nuevas horas
                                 do {
                                     horas = Auxiliar.leeEntero(
-                                        "Horas actual: " + game.getTiempoJugado().split(":")[0]
-                                                + "\n¿Cuales son las nuevas horas jugadas? (-2 para usar el anterior, -1 para salir)");
+                                            "Horas actual: " + game.getTiempoJugado().split(":")[0]
+                                                    + "\n¿Cuales son las nuevas horas jugadas? (-2 para usar el anterior, -1 para salir)");
                                 } while (horas < -2 || horas > 23);
 
                                 if (horas != -1) {
@@ -971,8 +971,8 @@ public class Main {
                                     // Preguntamos por los nuevos minutos
                                     do {
                                         minutos = Auxiliar.leeEntero(
-                                            "Minutos actual: " + game.getTiempoJugado().split(":")[1]
-                                                    + "\n¿Cuales son los nuevos minutos jugados? (-2 para usar el anterior, -1 para salir)");
+                                                "Minutos actual: " + game.getTiempoJugado().split(":")[1]
+                                                        + "\n¿Cuales son los nuevos minutos jugados? (-2 para usar el anterior, -1 para salir)");
                                     } while (minutos < -2 || minutos > 59);
 
                                     if (minutos != -1) {
@@ -983,8 +983,8 @@ public class Main {
                                         // Preguntamos por los nuevos segundos
                                         do {
                                             segundos = Auxiliar.leeEntero(
-                                                "Segundos actual: " + game.getTiempoJugado().split(":")[2]
-                                                        + "\n¿Cuales son los nuevos segundos jugados? (-2 para usar el anterior, -1 para salir)");
+                                                    "Segundos actual: " + game.getTiempoJugado().split(":")[2]
+                                                            + "\n¿Cuales son los nuevos segundos jugados? (-2 para usar el anterior, -1 para salir)");
                                         } while (segundos < -2 || segundos > 59);
 
                                         if (segundos != -1) {
@@ -993,7 +993,9 @@ public class Main {
                                             }
 
                                             // Actualizamos
-                                            String tiempoJugado = (horas > 10 ? horas : "0"+horas) + ":" + (minutos > 10 ? minutos : "0"+minutos) + ":" + (segundos > 10 ? segundos : "0"+segundos);
+                                            String tiempoJugado = (horas > 10 ? horas : "0" + horas) + ":"
+                                                    + (minutos > 10 ? minutos : "0" + minutos) + ":"
+                                                    + (segundos > 10 ? segundos : "0" + segundos);
                                             game.setNombre(name);
                                             game.setTiempoJugado(tiempoJugado);
                                             Object ob = instancia.actualizar(game);
@@ -1022,6 +1024,544 @@ public class Main {
                 }
                 case 3 -> {
                     // Compra
+                    int idCompra = 0;
+                    int idPlayer = 0;
+                    int idGame = 0;
+                    double precio;
+                    String fecha;
+                    String cosa = "";
+                    int opcionCompra;
+                    Compra compra = null;
+
+                    // Preguntamos por cual campo desea buscar la compra
+                    do {
+                        opcionCompra = Auxiliar.leeEntero(
+                                "¿Cómo desea buscar la compra?\n" +
+                                        "1. Por su ID\n" +
+                                        "2. Por el Player\n" +
+                                        "3. Por el Game\n" +
+                                        "4. Por el precio\n" +
+                                        "5. Por la fecha\n" +
+                                        "6. Volver");
+
+                        switch (opcionCompra) {
+                            case 1 -> {
+                                // ID
+                                idCompra = Auxiliar.leeEntero("¿Cuál es su ID? (-1 para salir)");
+
+                                if (idCompra > -1) {
+                                    try {
+                                        compra = (Compra) instancia.buscarPorId("getCompraById", idCompra);
+                                    } catch (Exception e) {
+                                        System.out.println("No se ha encontrado ninguna compra con ese ID");
+                                    }
+                                } else {
+                                    System.out.println("Saliendo...");
+                                }
+                            }
+                            case 2 -> {
+                                // Player
+                                String nick;
+                                String mail;
+                                int opcionPlayer;
+                                Player player = null;
+
+                                // Preguntamos por cuál campo desea buscar al player
+                                do {
+                                    opcionPlayer = Auxiliar.leeEntero(
+                                            "¿Cómo desea buscar al Player?\n" +
+                                                    "1. Por su ID\n" +
+                                                    "2. Por su Nick\n" +
+                                                    "3. Por su Email\n" +
+                                                    "4. Volver");
+
+                                    switch (opcionPlayer) {
+                                        case 1 -> {
+                                            // ID
+                                            idPlayer = Auxiliar.leeEntero("¿Cuál es su ID? (-1 para salir)");
+
+                                            if (idPlayer > -1) {
+                                                try {
+                                                    player = (Player) instancia.buscarPorId("getPlayerById", idPlayer);
+                                                } catch (Exception e) {
+                                                    System.out.println("No se ha encontrado ningún player con ese ID");
+                                                }
+                                            } else {
+                                                System.out.println("Saliendo...");
+                                            }
+                                        }
+                                        case 2 -> {
+                                            // Nick
+                                            nick = Auxiliar.leeString("¿Cuál es el nick? (-1 para salir)");
+
+                                            if (!nick.equals("-1")) {
+                                                int playerOption = 0;
+                                                List<Player> players = Auxiliar.getAllPlayersByNick(nick, instancia);
+
+                                                if (players != null && !players.isEmpty()) {
+                                                    if (players.size() > 1) {
+                                                        Auxiliar.pintaPlayers(players);
+
+                                                        do {
+                                                            // Leemos la opción
+                                                            playerOption = Auxiliar.leeEntero(
+                                                                    "Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
+                                                        } while (playerOption > players.size());
+                                                    }
+
+                                                    if (playerOption != -1) {
+                                                        player = players.get(playerOption);
+                                                    } else {
+                                                        System.out.println("Volviendo...");
+                                                    }
+                                                } else {
+                                                    System.out
+                                                            .println("No se ha encontrado ningún player con ese nick");
+                                                }
+                                            } else {
+                                                System.out.println("Volviendo...");
+                                            }
+                                        }
+                                        case 3 -> {
+                                            // Email
+                                            mail = Auxiliar.leeString("¿Cuál es el email? (-1 para salir)");
+
+                                            if (!mail.equals("-1")) {
+                                                int playerOption = 0;
+                                                List<Player> players = Auxiliar.getAllPlayersByEmail(mail, instancia);
+
+                                                if (players != null && !players.isEmpty()) {
+                                                    if (players.size() > 1) {
+                                                        Auxiliar.pintaPlayers(players);
+
+                                                        do {
+                                                            // Leemos la opción
+                                                            playerOption = Auxiliar.leeEntero(
+                                                                    "Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
+                                                        } while (playerOption > players.size());
+                                                    }
+
+                                                    if (playerOption != -1) {
+                                                        player = players.get(playerOption);
+                                                    } else {
+                                                        System.out.println("Volviendo...");
+                                                    }
+                                                } else {
+                                                    System.out
+                                                            .println("No se ha encontrado ningún player con ese email");
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (opcionPlayer != 4 && player != null) {
+                                        // Buscamos las compras
+                                        List<Compra> compras = instancia.listarConParametros(
+                                                "getComprasByPlayer",
+                                                "idPlayer",
+                                                player.getIdPlayer());
+
+                                        if (!compras.isEmpty()) {
+                                            // Pintamos las compras
+                                            int compraOpcion = 0;
+
+                                            if (compras.size() > 1) {
+                                                Auxiliar.pintaCompras(compras, instancia);
+
+                                                compraOpcion = Auxiliar.pideElegirOpcionObjeto(compras.size(),
+                                                        "Compra");
+                                            }
+
+                                            if (compraOpcion != -1) {
+                                                Auxiliar.muestraPlayerElegido(player);
+                                                compra = compras.get(compraOpcion);
+                                                Auxiliar.muestraCompraElegida(compra, instancia);
+                                                break;
+                                            } else {
+                                                System.out.println("Volviendo...");
+                                            }
+                                        } else {
+                                            System.out.println("No se ha encontrado ninguna compra para ese player");
+                                        }
+                                    }
+                                } while (opcionPlayer != 4);
+                                if (opcionPlayer == 4) {
+                                    System.out.println("Volviendo...");
+                                }
+                            }
+                            case 3 -> {
+                                // Game
+                                String name;
+                                int opcionGame;
+                                Game game = null;
+
+                                // Preguntamos por cual campo desea buscar el Game
+                                do {
+                                    opcionGame = Auxiliar.leeEntero(
+                                            "¿Cómo desea buscar al Game?\n" +
+                                                    "1. Por su ID\n" +
+                                                    "2. Por su Nombre\n" +
+                                                    "3. Volver");
+
+                                    switch (opcionGame) {
+                                        case 1 -> {
+                                            // ID
+                                            idGame = Auxiliar.leeEntero("¿Cuál es su ID? (-1 para salir)");
+
+                                            if (idGame > -1) {
+                                                try {
+                                                    game = (Game) instancia.buscarPorId("getGameById", idGame);
+                                                } catch (Exception e) {
+                                                    System.out.println("No se ha encontrado ningún game con ese ID");
+                                                }
+                                            } else {
+                                                System.out.println("Saliendo...");
+                                            }
+                                        }
+                                        case 2 -> {
+                                            // Nombre
+                                            name = Auxiliar.leeString("¿Cuál es el nombre? (-1 para salir)");
+
+                                            if (!name.equals("-1")) {
+                                                int gameOption = 0;
+                                                List<Game> games = Auxiliar.getAllGamesByName(name, instancia);
+
+                                                if (games != null && !games.isEmpty()) {
+                                                    if (games.size() > 1) {
+                                                        Auxiliar.pintaGames(games);
+
+                                                        do {
+                                                            // Leemos la opción
+                                                            gameOption = Auxiliar.leeEntero(
+                                                                    "Escribe el número de opción del game que deseas seleccionar (-1 para volver)");
+                                                        } while (gameOption > games.size());
+                                                    }
+
+                                                    if (gameOption != -1) {
+                                                        game = games.get(gameOption);
+                                                    } else {
+                                                        System.out.println("Volviendo...");
+                                                    }
+                                                } else {
+                                                    System.out
+                                                            .println("No se ha encontrado ningún player con ese nick");
+                                                }
+                                            } else {
+                                                System.out.println("Volviendo...");
+                                            }
+                                        }
+                                    }
+
+                                    if (opcionGame != 3 && game != null) {
+                                        // Buscamos las compras
+                                        List<Compra> compras = instancia.listarConParametros(
+                                                "getComprasByGame",
+                                                "idGame",
+                                                game.getIdGame());
+
+                                        if (!compras.isEmpty()) {
+                                            // Pintamos las compras
+                                            int compraOpcion = 0;
+
+                                            if (compras.size() > 1) {
+                                                Auxiliar.pintaCompras(compras, instancia);
+
+                                                compraOpcion = Auxiliar.pideElegirOpcionObjeto(compras.size(),
+                                                        "Compra");
+                                            }
+
+                                            if (compraOpcion != -1) {
+                                                Auxiliar.muestraGameElegido(game);
+                                                compra = compras.get(compraOpcion);
+                                                Auxiliar.muestraCompraElegida(compra, instancia);
+                                                break;
+                                            } else {
+                                                System.out.println("Volviendo...");
+                                            }
+                                        } else {
+                                            System.out.println("No se ha encontrado ninguna compra para ese game");
+                                        }
+                                    }
+                                } while (opcionGame != 3);
+                                if (opcionGame == 3) {
+                                    System.out.println("Volviendo...");
+                                }
+                            }
+                            case 4 -> {
+                                // Precio
+                                int compraOpcion = 0;
+
+                                precio = Auxiliar.leeDouble("¿Cuál es el precio de la compra?");
+
+                                // Buscamos las compras
+                                List<Compra> compras = instancia.listarPorPrecioUnico(precio);
+
+                                if (!compras.isEmpty()) {
+                                    if (compras.size() > 1) {
+                                        Auxiliar.pintaCompras(compras, instancia);
+                                        compraOpcion = Auxiliar.pideElegirOpcionObjeto(compras.size(), "Compra");
+                                    }
+
+                                    if (compraOpcion != -1) {
+                                        compra = compras.get(compraOpcion);
+                                        Auxiliar.muestraCompraElegida(compra, instancia);
+                                    } else {
+                                        System.out.println("Volviendo...");
+                                    }
+                                } else {
+                                    System.out.println("No se ha encontrado ninguna compra con ese precio");
+                                }
+                            }
+                            case 5 -> {
+                                // Fecha
+                                int compraOpcion = 0;
+                                fecha = Auxiliar.pideFecha();
+
+                                List<Compra> compras = instancia.buscarPorParametro("getComprasByDate", "fechaCompra",
+                                        fecha);
+
+                                if (!compras.isEmpty()) {
+                                    if (compras.size() > 1) {
+                                        compraOpcion = Auxiliar.pideElegirOpcionObjeto(compras.size(), "compra");
+                                    }
+
+                                    if (compraOpcion != -1) {
+                                        compra = compras.get(compraOpcion);
+                                        Auxiliar.muestraCompraElegida(compra, instancia);
+                                    } else {
+                                        System.out.println("Volviendo...");
+                                    }
+                                } else {
+                                    System.out.println("No se ha encontrado ninguna compra con esa fecha");
+                                }
+                            }
+                        }
+
+                        if (opcionCompra != 6 && compra != null) {
+                            // Pedimos el nuevo Player
+                            boolean nuevoPlayer;
+
+                            nuevoPlayer = Auxiliar.pideEjecutar("¿Desea modificar el player de esta compra? (y/n)");
+
+                            if (nuevoPlayer) {
+                                int opcionPlayer;
+                                Player player = null;
+                                String nick;
+                                String mail;
+
+                                // Preguntamos por cuál campo desea buscar al player
+                                do {
+                                    opcionPlayer = Auxiliar.leeEntero(
+                                            "¿Cómo desea buscar al Player?\n" +
+                                                    "1. Por su ID\n" +
+                                                    "2. Por su Nick\n" +
+                                                    "3. Por su Email\n" +
+                                                    "4. Volver");
+
+                                    switch (opcionPlayer) {
+                                        case 1 -> {
+                                            // ID
+                                            idPlayer = Auxiliar.leeEntero("¿Cuál es su ID? (-1 para salir)");
+
+                                            if (idPlayer > -1) {
+                                                try {
+                                                    player = (Player) instancia.buscarPorId("getPlayerById", idPlayer);
+                                                } catch (Exception e) {
+                                                    System.out.println("No se ha encontrado ningún player con ese ID");
+                                                }
+                                            } else {
+                                                System.out.println("Saliendo...");
+                                            }
+                                        }
+                                        case 2 -> {
+                                            // Nick
+                                            nick = Auxiliar.leeString("¿Cuál es el nick? (-1 para salir)");
+
+                                            if (!nick.equals("-1")) {
+                                                int playerOption = 0;
+                                                List<Player> players = Auxiliar.getAllPlayersByNick(nick, instancia);
+
+                                                if (players != null && !players.isEmpty()) {
+                                                    if (players.size() > 1) {
+                                                        Auxiliar.pintaPlayers(players);
+
+                                                        do {
+                                                            // Leemos la opción
+                                                            playerOption = Auxiliar.leeEntero(
+                                                                    "Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
+                                                        } while (playerOption > players.size());
+                                                    }
+
+                                                    if (playerOption != -1) {
+                                                        player = players.get(playerOption);
+                                                    } else {
+                                                        System.out.println("Volviendo...");
+                                                    }
+                                                } else {
+                                                    System.out
+                                                            .println("No se ha encontrado ningún player con ese nick");
+                                                }
+                                            } else {
+                                                System.out.println("Volviendo...");
+                                            }
+                                        }
+                                        case 3 -> {
+                                            // Email
+                                            mail = Auxiliar.leeString("¿Cuál es el email? (-1 para salir)");
+
+                                            if (!mail.equals("-1")) {
+                                                int playerOption = 0;
+                                                List<Player> players = Auxiliar.getAllPlayersByEmail(mail, instancia);
+
+                                                if (players != null && !players.isEmpty()) {
+                                                    if (players.size() > 1) {
+                                                        Auxiliar.pintaPlayers(players);
+
+                                                        do {
+                                                            // Leemos la opción
+                                                            playerOption = Auxiliar.leeEntero(
+                                                                    "Escribe el número de opción del player que deseas seleccionar (-1 para volver)");
+                                                        } while (playerOption > players.size());
+                                                    }
+
+                                                    if (playerOption != -1) {
+                                                        player = players.get(playerOption);
+                                                    } else {
+                                                        System.out.println("Volviendo...");
+                                                    }
+                                                } else {
+                                                    System.out
+                                                            .println("No se ha encontrado ningún player con ese email");
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (opcionPlayer != 4 && player != null) {
+                                        Auxiliar.muestraPlayerElegido(player);
+                                        idPlayer = player.getIdPlayer();
+                                        break;
+                                    }
+                                } while (opcionPlayer != 4);
+                                if (opcionPlayer == 4) {
+                                    System.out.println("Volviendo...");
+                                }
+                            }
+
+                            // Pedimos nuevo Game
+                            boolean nuevoGame;
+
+                            nuevoGame = Auxiliar.pideEjecutar("¿Desea modificar el game de esta compra? (y/n)");
+
+                            if (nuevoGame) {
+                                String name;
+                                int opcionGame;
+                                Game game = null;
+
+                                // Preguntamos por cual campo desea buscar el Game
+                                do {
+                                    opcionGame = Auxiliar.leeEntero(
+                                            "¿Cómo desea buscar al Game?\n" +
+                                                    "1. Por su ID\n" +
+                                                    "2. Por su Nombre\n" +
+                                                    "3. Volver");
+
+                                    switch (opcionGame) {
+                                        case 1 -> {
+                                            // ID
+                                            idGame = Auxiliar.leeEntero("¿Cuál es su ID? (-1 para salir)");
+
+                                            if (idGame > -1) {
+                                                try {
+                                                    game = (Game) instancia.buscarPorId("getGameById", idGame);
+                                                } catch (Exception e) {
+                                                    System.out.println("No se ha encontrado ningún game con ese ID");
+                                                }
+                                            } else {
+                                                System.out.println("Saliendo...");
+                                            }
+                                        }
+                                        case 2 -> {
+                                            // Nombre
+                                            name = Auxiliar.leeString("¿Cuál es el nombre? (-1 para salir)");
+
+                                            if (!name.equals("-1")) {
+                                                int gameOption = 0;
+                                                List<Game> games = Auxiliar.getAllGamesByName(name, instancia);
+
+                                                if (games != null && !games.isEmpty()) {
+                                                    if (games.size() > 1) {
+                                                        Auxiliar.pintaGames(games);
+
+                                                        do {
+                                                            // Leemos la opción
+                                                            gameOption = Auxiliar.leeEntero(
+                                                                    "Escribe el número de opción del game que deseas seleccionar (-1 para volver)");
+                                                        } while (gameOption > games.size());
+                                                    }
+
+                                                    if (gameOption != -1) {
+                                                        game = games.get(gameOption);
+                                                    } else {
+                                                        System.out.println("Volviendo...");
+                                                    }
+                                                } else {
+                                                    System.out
+                                                            .println("No se ha encontrado ningún player con ese nick");
+                                                }
+                                            } else {
+                                                System.out.println("Volviendo...");
+                                            }
+                                        }
+                                    }
+
+                                    if (opcionGame != 3 && game != null) {
+                                        Auxiliar.muestraGameElegido(game);
+                                        idGame = game.getIdGame();
+                                        cosa = game.getNombre();
+                                        break;
+                                    }
+                                } while (opcionGame != 3);
+                                if (opcionGame == 3) {
+                                    System.out.println("Volviendo...");
+                                }
+                            }
+
+                            // Pedimos el nuevo precio
+                            precio = Auxiliar.leeDouble("Precio actual: " + compra.getPrecio()
+                                    + "\n¿Cuál es el nuevo precio? (-2 para usar el anterior, -1 para salir)");
+
+                            if (precio != -1) {
+                                if (precio == -2) {
+                                    precio = compra.getPrecio();
+                                }
+
+                                // Pedimos la nueva fecha
+                                fecha = Auxiliar.pideFecha();
+
+                                if (!fecha.equals("-1")) {
+                                    // Modificamos la compra
+                                    compra.setIdPlayer(idPlayer);
+                                    compra.setIdGame(idGame);
+                                    compra.setCosa(cosa);
+                                    compra.setPrecio(precio);
+                                    compra.setFechaCompra(fecha);
+
+                                    Object ob = instancia.actualizar(compra);
+
+                                    if (ob != null) {
+                                        System.out.println("Compra modificada correctamente");
+                                    } else {
+                                        System.out.println("No se ha podido modificar la compra");
+                                    }
+                                } else {
+                                    System.out.println("Volviendo...");
+                                }
+                            } else {
+                                System.out.println("Volviendo...");
+                            }
+                        }
+                    } while (opcionCompra != 6);
                 }
             }
         } catch (Exception e) {
