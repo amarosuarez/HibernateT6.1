@@ -248,6 +248,24 @@ public class AccesoBD {
     }
 
     /**
+     * Función que actualiza un objeto
+     *
+     * @param cosa Objeto a actualizar
+     * @return Objeto
+     */
+    public Object actualizar(Object cosa) {
+        try { // ✅ Se cierra automáticamente
+            Transaction transaction = session.beginTransaction();
+            session.update(cosa);
+            transaction.commit();
+            return cosa;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * Función que elimina un objeto
      *
      * @param cosa Objeto a eliminar

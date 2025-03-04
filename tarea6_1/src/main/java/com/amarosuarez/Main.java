@@ -734,7 +734,7 @@ public class Main {
                     String password;
                     int idPlayer;
                     int opcionPlayer;
-                    Player player;
+                    Player player = null;
 
                     // Preguntamos por cuál campo desea buscar al player
                     do {
@@ -751,7 +751,11 @@ public class Main {
                                 idPlayer = Auxiliar.leeEntero("¿Cuál es su ID? (-1 para salir)");
 
                                 if (idPlayer > -1) {
-                                    player = (Player) instancia.buscarPorId("getPlayerById", idPlayer);
+                                    try {
+                                        player = (Player) instancia.buscarPorId("getPlayerById", idPlayer);
+                                    } catch (Exception e) {
+                                        System.out.println("No se ha encontrado ningún player con ese ID");
+                                    }
                                 } else {
                                     System.out.println("Saliendo...");
                                 }
@@ -819,6 +823,52 @@ public class Main {
                                         System.out.println("No se ha encontrado ningún player con ese email");
                                     }
                                 }
+                            }
+                        }
+
+                        if (opcionPlayer != 4 && player != null) {
+                            // Preguntamos por el nuevo nick
+                            nick = Auxiliar
+                                    .leeString("Nick actual: " + player.getNick() + "\n¿Cuál es el nuevo nick? (ENTER para usar el anterior, -1 para salir)");
+
+                            if (!nick.equals("-1")) {
+                                if (nick.isEmpty()) {
+                                    nick = player.getNick();
+                                }
+
+                                // Preguntamos por el nuevo mail
+                                mail = Auxiliar.leeString(
+                                        "Email actual: " + player.getEmail() + "\n¿Cuál es el nuevo email? (ENTER para usar el anterior, -1 para salir)");
+
+                                if (!mail.equals("-1")) {
+                                    if (mail.isEmpty()) {
+                                        mail = player.getEmail();
+                                    }
+
+                                    // Preguntamos por la nuevo password
+                                    password = Auxiliar.leeString(
+                                            "Contraseña actual: " + player.getPassword() + "\n¿Cuál es la nueva contraseña? (ENTER para usar el anterior, -1 para salir)");
+
+                                    if (!password.equals("-1")) {
+                                        if (password.isEmpty()) {
+                                            password = player.getPassword();
+                                        }
+                                    }
+
+                                    // Actualizamos
+                                    player.setNick(nick);
+                                    player.setEmail(mail);
+                                    player.setPassword(password);
+                                    Object ob = instancia.actualizar(player);
+
+                                    if (ob != null) {
+                                        System.out.println("Player actualizado");
+                                    } else {
+                                        System.out.println("Ha ocurrido un error al intentar actualizar el player");
+                                    }
+                                }
+                            } else {
+                                System.out.println("Volviendo...");
                             }
                         }
                     } while (opcionPlayer != 4);
