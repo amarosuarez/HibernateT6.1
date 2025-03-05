@@ -93,7 +93,9 @@ public class AccesoBD {
     /**
      * Función que crea la tabla players
      */
-    public void crearTablaPlayers() {
+    public boolean crearTablaPlayers() {
+        boolean tablaCreada = false;
+
         if (!tablaExiste("Players")) {
             try {
                 abrir();
@@ -107,8 +109,8 @@ public class AccesoBD {
 
                 session.createNativeQuery(sql).executeUpdate();
 
+                tablaCreada = true;
                 transaction.commit(); // 🟢 Confirmar la transacción
-                System.out.println("Tabla Players creada");
             } catch (Exception e) {
                 if (transaction != null && transaction.isActive()) {
                     transaction.rollback(); // 🔄 Revertir si hay un error
@@ -118,12 +120,16 @@ public class AccesoBD {
                 cerrar();
             }
         }
+
+        return tablaCreada;
     }
 
     /**
      * Función que crea la tabla games
      */
-    public void crearTablaGames() {
+    public boolean crearTablaGames() {
+        boolean tablaCreada = false;
+
         if (!tablaExiste("Games")) {
             try {
                 abrir();
@@ -137,8 +143,8 @@ public class AccesoBD {
                 // Ejecutar la sentencia SQL nativa
                 session.createNativeQuery(sql).executeUpdate();
 
+                tablaCreada = true;
                 transaction.commit(); // 🟢 Confirmar la transacción
-                System.out.println("Tabla Games creada");
             } catch (Exception e) {
                 // Revertir la transacción en caso de error
                 if (transaction != null) {
@@ -149,12 +155,16 @@ public class AccesoBD {
                 cerrar();
             }
         }
+
+        return tablaCreada;
     }
 
     /**
      * Función que crea la tabla compras
      */
-    public void crearTablaCompras() {
+    public boolean crearTablaCompras() {
+        boolean tablaCreada = false;
+
         if (!tablaExiste("Compras")) {
             try {
                 abrir();
@@ -174,18 +184,19 @@ public class AccesoBD {
                 // Ejecutar la sentencia SQL nativa
                 session.createNativeQuery(sql).executeUpdate();
 
+                tablaCreada = true;
                 transaction.commit(); // 🟢 Confirmar la transacción
-                System.out.println("Tabla Compras creada");
             } catch (Exception e) {
                 // Revertir la transacción en caso de error
                 if (transaction != null) {
                     transaction.rollback();
                 }
-                e.printStackTrace();
             } finally {
                 cerrar();
             }
         }
+
+        return tablaCreada;
     }
 
     /**
@@ -193,9 +204,54 @@ public class AccesoBD {
      */
     public void crearTablas() {
         try {
-            crearTablaPlayers();
-            crearTablaGames();
-            crearTablaCompras();
+            boolean players = crearTablaPlayers();
+            boolean games = crearTablaGames();
+            boolean compras = crearTablaCompras();
+
+            if (players) {
+                System.out.println("Tabla Players creada");
+            }
+
+            if (games) {
+                System.out.println("Tabla Games creada");
+            }
+
+            if (compras) {
+                System.out.println("Tabla Compras creada");
+            }
+        } catch (Exception e) {
+            // Error
+        }
+    }
+
+    /**
+     * Función que crea todas las tablas y muestra mensajes
+     */
+    public void crearTablasConMensaje() {
+        try {
+            boolean players = crearTablaPlayers();
+            boolean games = crearTablaGames();
+            boolean compras = crearTablaCompras();
+
+            if (players) {
+                System.out.println("Tabla Players creada");
+            } else {
+                System.out.println("La tabla Players no se ha creado, es posible que ya exista");
+            }
+
+            if (games) {
+                System.out.println("Tabla Games creada");
+            } else {
+
+                System.out.println("La tabla Games no se ha creado, es posible que ya exista");
+            }
+
+            if (compras) {
+                System.out.println("Tabla Compras creada");
+            } else {
+
+                System.out.println("La tabla Compras no se ha creado, es posible que ya exista o que necesite otras tablas");
+            }
         } catch (Exception e) {
             // Error
         }
@@ -203,7 +259,7 @@ public class AccesoBD {
 
     /**
      * Verifica si existe una tabla en la base de datos
-     * 
+     *
      * @param nombreTabla nombre de la tabla a verificar
      * @return true si la tabla existe, false en caso contrario
      */
@@ -333,8 +389,8 @@ public class AccesoBD {
     }
 
     /**
-     * Función que recibe el nombre de una tabla y borra la tabla de la base
-     * de datos
+     * Función que recibe el nombre de una tabla y borra la tabla de la base de
+     * datos
      *
      * @param nombreTabla Nombre de la tabla
      * @return Tabla borrada
@@ -415,8 +471,8 @@ public class AccesoBD {
      * Función que devuelve una lista buscada por un parámetro determinado
      *
      * @param namedQuery Nombre de la query
-     * @param parametro  Nombre del parámetro
-     * @param valor      Valor del parámetro
+     * @param parametro Nombre del parámetro
+     * @param valor Valor del parámetro
      * @return Lista
      */
     public List listarConParametros(String namedQuery, String parametro, String valor) {
@@ -430,8 +486,8 @@ public class AccesoBD {
      * valor es int
      *
      * @param namedQuery Nombre de la query
-     * @param parametro  Nombre del parámetro
-     * @param valor      Valor del parámetro (int)
+     * @param parametro Nombre del parámetro
+     * @param valor Valor del parámetro (int)
      * @return Lista
      */
     public List listarConParametros(String namedQuery, String parametro, int valor) {
@@ -473,7 +529,7 @@ public class AccesoBD {
      * Función que devuelve un objeto buscado por id
      *
      * @param namedQuery Nombre de la query
-     * @param id         Id a buscar
+     * @param id Id a buscar
      * @return Objeto
      */
     public Object buscarPorId(String namedQuery, int id) {
@@ -486,8 +542,8 @@ public class AccesoBD {
      * Función que busca por parámetro especificado
      *
      * @param namedQuery Nombre de la query
-     * @param parametro  Nombre del parámetro
-     * @param valor      Valor del parámetro (String)
+     * @param parametro Nombre del parámetro
+     * @param valor Valor del parámetro (String)
      * @return Lista de los objetos encontrados
      */
     public List buscarPorParametro(String namedQuery, String parametro, String valor) {
