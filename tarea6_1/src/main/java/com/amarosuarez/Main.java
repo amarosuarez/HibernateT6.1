@@ -1459,6 +1459,8 @@ public class Main {
                                 if (opcionPlayer == 4) {
                                     System.out.println("Volviendo...");
                                 }
+                            } else {
+                                idPlayer = compra.getIdPlayer();
                             }
 
                             // Pedimos nuevo Game
@@ -1538,6 +1540,9 @@ public class Main {
                                 if (opcionGame == 3) {
                                     System.out.println("Volviendo...");
                                 }
+                            } else {
+                                idGame = compra.getIdGame();
+                                cosa = compra.getCosa();
                             }
 
                             // Pedimos el nuevo precio
